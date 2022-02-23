@@ -24,51 +24,51 @@
 	if(compulsory == "yes")
 		jQuery(".single_add_to_cart_button").prop("disabled", true);
 	
-	if(jQuery(".scwatbwsr_schedules_daily").size() > 0){
-		var array_dates = jQuery(".array_dates").val();
-		
-		if(jQuery(".array_times").val()){
-			var array_times = jQuery(".array_times").val().split(",");
-			
-			jQuery('#scwatbwsr_schedules_picker').datetimepicker({
-				disabledWeekDays: array_dates,
-				allowTimes: array_times,
-				format: date_format+' H:i',
-				defaultTime: array_times[0],
-				closeOnDateSelect: false,
-				onSelectTime:function(ct, $i){
-					checkSchedule($i[0].value);
-				},
-				onSelectDate:function(ct,$i){
-					checkSchedule($i[0].value);
-				}
-			});
-		}else{
-			jQuery('#scwatbwsr_schedules_picker').datetimepicker({
-				disabledWeekDays: array_dates,
-				step: 5,
-				format: date_format+' H:i',
-				defaultTime: "00:00",
-				closeOnDateSelect: false,
-				onSelectTime:function(ct, $i){
-					checkSchedule($i[0].value);
-				},
-				onSelectDate:function(ct,$i){
-					checkSchedule($i[0].value);
-				}
-			});
-		}
-	}else{
-		jQuery(".scwatbwsr_schedules_item").each(function(){
-			var thische = jQuery(this);
-			thische.on("click", function(){
-				jQuery(".scwatbwsr_schedules_item").removeClass("active");
-				thische.addClass("active");
-				
-				checkSchedule(thische.text());
-			});
-		});
-	}
+	// if(jQuery(".scwatbwsr_schedules_daily").size() > 0){
+	// 	var array_dates = jQuery(".array_dates").val();
+	//
+	// 	if(jQuery(".array_times").val()){
+	// 		var array_times = jQuery(".array_times").val().split(",");
+	//
+	// 		jQuery('#scwatbwsr_schedules_picker').datetimepicker({
+	// 			disabledWeekDays: array_dates,
+	// 			allowTimes: array_times,
+	// 			format: date_format+' H:i',
+	// 			defaultTime: array_times[0],
+	// 			closeOnDateSelect: false,
+	// 			onSelectTime:function(ct, $i){
+	// 				checkSchedule($i[0].value);
+	// 			},
+	// 			onSelectDate:function(ct,$i){
+	// 				checkSchedule($i[0].value);
+	// 			}
+	// 		});
+	// 	}else{
+	// 		jQuery('#scwatbwsr_schedules_picker').datetimepicker({
+	// 			disabledWeekDays: array_dates,
+	// 			step: 5,
+	// 			format: date_format+' H:i',
+	// 			defaultTime: "00:00",
+	// 			closeOnDateSelect: false,
+	// 			onSelectTime:function(ct, $i){
+	// 				checkSchedule($i[0].value);
+	// 			},
+	// 			onSelectDate:function(ct,$i){
+	// 				checkSchedule($i[0].value);
+	// 			}
+	// 		});
+	// 	}
+	// }else{
+	// 	jQuery(".scwatbwsr_schedules_item").each(function(){
+	// 		var thische = jQuery(this);
+	// 		thische.on("click", function(){
+	// 			jQuery(".scwatbwsr_schedules_item").removeClass("active");
+	// 			thische.addClass("active");
+	//
+	// 			checkSchedule(thische.text());
+	// 		});
+	// 	});
+	// }
 	function checkSchedule(schedule){
 		jQuery.ajax({
 			type: "POST",
@@ -203,7 +203,7 @@
 						jQuery(".single_add_to_cart_button").prop("disabled", true);
 				}
 				
-				if(posttype == "post"){
+				if(posttype == "tribe_events"){
 					jQuery(".scwatbwsr_total_value").text(data);
 				}
 			}
@@ -227,7 +227,7 @@
 	resetButton.addEventListener('click', panzoom.reset)
 	
 	// wordpress post
-	if(posttype == "post"){
+	if(posttype == "tribe_events"){
 		jQuery(".scwatbwsr_form_submit").click(function(){
 			var name = jQuery(".scwatbwsr_form_name_input").val();
 			var address = jQuery(".scwatbwsr_form_address_input").val();
@@ -247,9 +247,11 @@
 				});
 			});
 			
-			var schedule = jQuery(".scwatbwsr_schedules_item.active").text().trim();
-			if(!schedule) schedule = jQuery("#scwatbwsr_schedules_picker").val();
-			
+			//var schedule = jQuery(".scwatbwsr_schedules_item.active").text().trim();
+			//if(!schedule) schedule = jQuery("#scwatbwsr_schedules_picker").val();
+			var schedule = jQuery(".scwatbwsr_schedule_item").text().trim();
+			console.log(schedule);
+
 			if(seats){
 				jQuery.ajax({
 					url: url+"helper.php",

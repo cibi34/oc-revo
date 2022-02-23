@@ -35,7 +35,7 @@ function scwatbwsr_install(){
 	$tablesTB = $wpdb->prefix . 'scwatbwsr_tables';
 	$seatsTB = $wpdb->prefix . 'scwatbwsr_seats';
 	$productsTb = $wpdb->prefix . 'scwatbwsr_products';
-	$ordersTB = $wpdb->prefix . 'scwatbwsr_orders';
+	$ordersTB = $wpdb->prefix . '$ordersTB';
 	$bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
 	
 	$roomsSql = "CREATE TABLE $roomsTB (
@@ -1284,16 +1284,16 @@ add_action( 'woocommerce_cart_item_removed', 'scwatbwsr_cart_updated', 10, 2 );
 add_action( 'add_meta_boxes', 'scwatbwsr_add_tab_admin_post', 10, 2 );
 function scwatbwsr_add_tab_admin_post($post_type, $post){
 	global $wp_meta_boxes;
-	$wp_meta_boxes[ 'post' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'title' ] = "SCW Table Booking";
-	$wp_meta_boxes[ 'post' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'args' ] = "";
-	$wp_meta_boxes[ 'post' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'id' ] = "scwatbwsr";
-	$wp_meta_boxes[ 'post' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'callback' ] = "scwatbwsr_add_tab_admin_post_display";
+	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'title' ] = "SCW Table Booking";
+	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'args' ] = "";
+	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'id' ] = "scwatbwsr";
+	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'callback' ] = "scwatbwsr_add_tab_admin_post_display";
 }
 function scwatbwsr_add_tab_admin_post_display(){
 	global $wpdb;
 	$postId = $_GET['post'];
 	
-	if($postId && get_post_type($postId) == "post"){
+	if($postId && get_post_type($postId) == "tribe_events"){
 		wp_register_script('scwatbwsr-productscript', SCWATBWSR_URL .'js/product.js');
 		wp_enqueue_script('scwatbwsr-productscript');
 		wp_register_style('scwatbwsr-productcss', SCWATBWSR_URL .'css/product.css');
@@ -1356,7 +1356,7 @@ function scwatbwsr_content($content){
 	$getRoomSql = $wpdb->prepare("SELECT * from {$tableProducts} where proid=%d", $proId);
 	$room = $wpdb->get_results($getRoomSql);
 	
-	if(get_post_type($proId)=="post" && $room && !is_admin()){
+	if(get_post_type($proId)=="tribe_events" && $room && !is_admin()){
 		ob_start();
 		
 		$roomid = $room[0]->roomid;
@@ -1454,65 +1454,79 @@ function scwatbwsr_content($content){
 					<span class="scwatbwsr_types_item_bg" style="background: <?php echo esc_attr($tbbookedcolor) ?>">bg</span>
 				</span>
 			</div>
-			
-			<div class="scwatbwsr_schedules <?php if($checkSchedules){ ?>scwatbwsr_schedules_special<?php }else{ ?>scwatbwsr_schedules_daily<?php } ?>">
-				<?php
-				if($checkSchedules){
-					?><div class="scwatbwsr_schedules_header"><?php echo esc_html__("Please choose schedule first!", "scwatbwsr-translate") ?></div><?php
-					foreach($checkSchedules as $sche){
-						?><span class="scwatbwsr_schedules_item"><?php echo esc_attr($sche->schedule) ?></span><?php
-					}
-				}else{
-					$arroDay = array(0, 1, 2, 3, 4, 5, 6);
-					$arrDay = array();
-					$arrTime = "";
-					
-					$tableDailySchedules = $wpdb->prefix . 'scwatbwsr_dailyschedules';
-					$getDSSql = $wpdb->prepare("SELECT * from {$tableDailySchedules} where roomid=%d", $roomid);
-					$getDSRs = $wpdb->get_results($getDSSql);
-					if(isset($getDSRs[0]->daily)) $dailies = explode(",", $getDSRs[0]->daily);
-					else $dailies = array();
-					if($dailies){
-						foreach($dailies as $dai){
-							if($dai == "monday")
-								array_push($arrDay, 1);
-							elseif($dai == "tuesday")
-								array_push($arrDay, 2);
-							elseif($dai == "wednesday")
-								array_push($arrDay, 3);
-							elseif($dai == "thursday")
-								array_push($arrDay, 4);
-							elseif($dai == "friday")
-								array_push($arrDay, 5);
-							elseif($dai == "saturday")
-								array_push($arrDay, 6);
-							elseif($dai == "sunday")
-								array_push($arrDay, 0);
-						}
-					}
-					$arrfDay = array_diff($arroDay, $arrDay);
-					
-					$tableDailyTimes = $wpdb->prefix . 'scwatbwsr_dailytimes';
-					$getDTSql = $wpdb->prepare("SELECT * from {$tableDailyTimes} where roomid=%d", $roomid);
-					$times = $wpdb->get_results($getDTSql);
-					if($times){
-						foreach($times as $time){
-							if($arrTime)
-								$arrTime .= ",".$time->time;
-							else
-								$arrTime .= $time->time;
-						}
-					}
-	
-					?>
-					<div class="scwatbwsr_schedules_header"><?php echo esc_html__("Please choose schedule first!", "scwatbwsr-translate") ?></div>
-					<input class="array_dates" type="hidden" value='<?php echo json_encode($arrfDay, 1) ?>'>
-					<input class="array_times" type="hidden" value="<?php echo esc_attr($arrTime) ?>">
-					<input id="scwatbwsr_schedules_picker" type="text">
-					<?php
-				}
-				?>
-			</div>
+
+            <?php
+
+            $tribe_event = tribe_events_get_event();
+            if ($tribe_event) {
+                $start_time = tribe_get_start_time($tribe_event->ID);
+                $start_date = tribe_get_start_date($tribe_event->ID, false, "d.F Y");
+            }
+            ?>
+
+            <div class="scwatbwsr_schedule_item" style="display: none;"> <?php echo $start_date. " - " . $start_time ?> </div>
+
+            <script>
+            </script>
+
+<!--			<div class="scwatbwsr_schedules --><?php //if($checkSchedules){ ?><!--scwatbwsr_schedules_special--><?php //}else{ ?><!--scwatbwsr_schedules_daily--><?php //} ?><!--">-->
+<!--				--><?php
+//				if($checkSchedules){
+//					?><!--<div class="scwatbwsr_schedules_header">--><?php //echo esc_html__("Please choose schedule first!", "scwatbwsr-translate") ?><!--</div>--><?php
+//					foreach($checkSchedules as $sche){
+//						?><!--<span class="scwatbwsr_schedules_item">--><?php //echo esc_attr($sche->schedule) ?><!--</span>--><?php
+//					}
+//				}else{
+//					$arroDay = array(0, 1, 2, 3, 4, 5, 6);
+//					$arrDay = array();
+//					$arrTime = "";
+//
+//					$tableDailySchedules = $wpdb->prefix . 'scwatbwsr_dailyschedules';
+//					$getDSSql = $wpdb->prepare("SELECT * from {$tableDailySchedules} where roomid=%d", $roomid);
+//					$getDSRs = $wpdb->get_results($getDSSql);
+//					if(isset($getDSRs[0]->daily)) $dailies = explode(",", $getDSRs[0]->daily);
+//					else $dailies = array();
+//					if($dailies){
+//						foreach($dailies as $dai){
+//							if($dai == "monday")
+//								array_push($arrDay, 1);
+//							elseif($dai == "tuesday")
+//								array_push($arrDay, 2);
+//							elseif($dai == "wednesday")
+//								array_push($arrDay, 3);
+//							elseif($dai == "thursday")
+//								array_push($arrDay, 4);
+//							elseif($dai == "friday")
+//								array_push($arrDay, 5);
+//							elseif($dai == "saturday")
+//								array_push($arrDay, 6);
+//							elseif($dai == "sunday")
+//								array_push($arrDay, 0);
+//						}
+//					}
+//					$arrfDay = array_diff($arroDay, $arrDay);
+//
+//					$tableDailyTimes = $wpdb->prefix . 'scwatbwsr_dailytimes';
+//					$getDTSql = $wpdb->prepare("SELECT * from {$tableDailyTimes} where roomid=%d", $roomid);
+//					$times = $wpdb->get_results($getDTSql);
+//					if($times){
+//						foreach($times as $time){
+//							if($arrTime)
+//								$arrTime .= ",".$time->time;
+//							else
+//								$arrTime .= $time->time;
+//						}
+//					}
+//
+//					?>
+<!--					<div class="scwatbwsr_schedules_header">--><?php //echo esc_html__("Please choose schedule first!", "scwatbwsr-translate") ?><!--</div>-->
+<!--					<input class="array_dates" type="hidden" value='--><?php //echo json_encode($arrfDay, 1) ?><!--'>-->
+<!--					<input class="array_times" type="hidden" value="--><?php //echo esc_attr($arrTime) ?><!--">-->
+<!--					<input id="scwatbwsr_schedules_picker" type="text">-->
+<!--					--><?php
+//				}
+//				?>
+<!--			</div>-->
 			
 			<div class="scwatbwsr_map">
 				<div class="scwatbwsr_map_head"><?php echo esc_html__("Choose your Seats", "scwatbwsr-translate") ?></div>

@@ -568,5 +568,5 @@ if($task == "add_room"){
 	$table_name = $wpdb->prefix . 'scwatbwsr_orders';
 	$wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
 	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-	$proId, "", implode(",", $seatsnew), $_SESSION["schedule".$proId], $name, $address, $email, $phone, $note, $total));
+	$proId, "", implode(",", $seatsnew), $schedule, $name, $address, $email, $phone, $note, $total));
 }
