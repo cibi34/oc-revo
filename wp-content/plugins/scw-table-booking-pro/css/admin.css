@@ -1,0 +1,1165 @@
+
+p.submit {
+    display: none;
+}
+.form-table th {
+    display: none;
+}
+.form-table td {
+    padding: 0;
+}
+.scwatbwsr_content {
+    background: #fff;
+    box-sizing: border-box;
+	float: left;
+	width: 100%;
+	padding: 10px;
+}
+.scwatbwsr_add {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_add_head {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+	margin-bottom: 5px;
+}
+.scwatbwsr_add_name {
+    float: left;
+	width: 400px;
+	height: 35px;
+}
+.scwatbwsr_add_button {
+    float: left;
+    background: #0073aa;
+    color: #fff;
+    width: 120px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    cursor: pointer;
+	margin-top: 1px;
+}
+.scwatbwsr_rooms {
+    float: left;
+    width: 100%;
+	margin-top: 20px;
+}
+.scwatbwsr_room {
+    float: left;
+    width: 100%;
+	margin-top: 10px;
+}
+.scwatbwsr_room_head {
+    float: left;
+    background: #0085ba;
+    width: 100%;
+    color: #fff;
+    height: 40px;
+    line-height: 37px;
+}
+.scwatbwsr_room_head .fa-angle-double-right,
+.scwatbwsr_room_head .fa-angle-double-down {
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffba00;
+    margin-top: 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.scwatbwsr_room_head_name {
+    float: left;
+    font-weight: bold;
+    margin-left: 20px;
+	font-size: 15px;
+}
+.scwatbwsr_room_head_delete {
+    float: right;
+    color: #ff725b;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+.scwatbwsr_room_content {
+    float: left;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+	display: none;
+}
+.scwatbwsr_room_head_copy {
+    float: right;
+    margin-right: 20px;
+    cursor: pointer;
+    color: #07ea07;
+    font-size: 18px;
+}
+
+.scwatbwsr_room_content_tabs {
+	width: 100%;
+	position: relative;
+}
+.scwatbwsr_room_content_tabs > input, .scwatbwsr_room_content_tabs > section {
+	clear: both;
+	padding-top: 20px;
+	display: none;
+}
+.scwatbwsr_room_content_tabs > label {
+	font-weight: 600;
+	font-size: 14px;
+	display: block;
+	float: left;
+	width: 14.28%;
+	padding: 13px;
+	color: #757575;
+	cursor: pointer;
+	text-decoration: none;
+	text-align: center;
+	background: #f0f0f0;
+	box-sizing: border-box;
+}
+.scwatbwsr_room_content_tabs .tab-content.active{
+	display: inline-block;
+	background: #fff;
+	color: #535252;
+	position: relative;
+	width: 100%;
+}
+.scwatbwsr_room_content_tabs .tab-content p,
+.scwatbwsr_room_content_tabs .tab-content h3 {
+	-webkit-animation: fadeInScale 0.7s ease-in-out;
+	-moz-animation: fadeInScale 0.7s ease-in-out;
+	animation: fadeInScale 0.7s ease-in-out;
+}
+.scwatbwsr_room_content_tabs .tab-content h3  {
+	text-align: center;
+}
+.scwatbwsr_room_content_tabs > label.active {
+	background: #fff;
+	box-shadow: inset 0 3px #416b8f;
+}
+.scwatbwsr_room_content_tabs > label.active .fa {
+	color: #416b8f;
+}
+.scwatbwsr_room_content_tabs > label .fa {
+	font-size: 1.3em;
+	margin: 0 0.4em 0 0;
+}
+/*Media query*/
+@media only screen and (max-width: 930px) {
+	.scwatbwsr_room_content_tabs > label span {
+		font-size: 14px;
+	}
+	.scwatbwsr_room_content_tabs > label .fa {
+		font-size: 14px;
+	}
+}
+@media only screen and (max-width: 768px) {
+	.scwatbwsr_room_content_tabs > label span {
+		display: none;
+	}
+	.scwatbwsr_room_content_tabs > label .fa {
+		font-size: 16px;
+	}
+	.scwatbwsr_room_content_tabs {
+		width: 98%;
+	}
+}
+/*Content Animation*/
+@keyframes fadeInScale {
+	0% {
+		transform: scale(0.9);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.scwatbwsr_room_content_editname {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_room_content_editname_head {
+    float: left;
+	width: 100%;
+	font-weight: bold;
+}
+.scwatbwsr_room_content_editname_name {
+    float: left;
+	border: 1px solid #e5e5e5;
+	width: 400px;
+	clear: both;
+	margin-top: 10px;
+	height: 35px;
+}
+.scwatbwsr_roombg {
+    float: left;
+    width: 100%;
+	margin-top: 20px;
+}
+.scwatbwsr_roombg_label {
+    float: left;
+	width: 100%;
+	font-weight: bold;
+}
+.scwatbwsr_roombg_con {
+    float: left;
+	width: 100%;
+	margin-top: 10px;
+}
+.scwatbwsr_roombg_con_color {
+    float: left;
+	width: 100px;
+	height: 35px;
+}
+.scwatbwsr_roombg_con_color_button {
+    float: left;
+    background: #a36597;
+    color: #fff;
+    width: 80px;
+    text-align: center;
+    height: 35px;
+    margin-top: 1px;
+    line-height: 35px;
+    cursor: pointer;
+}
+.scwatbwsr_roombg_con_or {
+    float: left;
+    margin-left: 15px;
+	margin-right: 15px;
+}
+.scwatbwsr_roombg_con_image {
+    float: left;
+	width: 400px;
+	height: 35px;
+	border: 1px solid #e5e5e5;
+}
+.scwatbwsr_roombg_con_upload {
+    float: left;
+    background: #a36597;
+    color: #fff;
+    width: 100px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-top: 1px;
+}
+.scwatbwsr_roombg_con_bgpreview {
+    float: left;
+}
+.scwatbwsr_roombg_con_bgpreview img {
+    width: 100px;
+}
+.scwatbwsr_roomsize {
+    float: left;
+    width: 100%;
+	margin-top: 20px;
+}
+.scwatbwsr_roomsize_label {
+    float: left;
+	width: 100%;
+	font-weight: bold;
+}
+.scwatbwsr_roomsize_width {
+    float: left;
+    border: 1px solid #e5e5e5;
+    margin-top: 10px;
+	height: 35px;
+	width: 400px;
+}
+.scwatbwsr_roomsize_height {
+    float: left;
+    border: 1px solid #e5e5e5;
+    margin-top: 5px;
+	clear: both;
+	height: 35px;
+	width: 400px;
+}
+.scwatbwsr_bookedpr {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_bookedpr_label {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.scwatbwsr_bookedpr_tbcolor {
+    float: left;
+    width: 100px;
+    height: 35px;
+    margin-top: 10px;
+}
+.scwatbwsr_bookedpr_seatcolor {
+    float: left;
+    width: 100px;
+    height: 35px;
+    margin-top: 10px;
+}
+.scwatbwsr_basesetting_save {
+    float: left;
+	background: #0073aa;
+	color: #fff;
+	width: 120px;
+	text-align: center;
+	height: 35px;
+	line-height: 35px;
+	cursor: pointer;
+	margin-top: 30px;
+	clear: both;
+}
+
+.scwatbwsr_roomtype_add {
+    float: left;
+    width: 35%;
+	border-right: 1px solid #ccc;
+	box-sizing: border-box;
+}
+.scwatbwsr_roomtype_add_head {
+    float: left;
+    width: 100%;
+	font-weight: bold;
+}
+.scwatbwsr_roomtype_add_name {
+    float: left;
+	clear: both;
+	width: 90%;
+	margin-top: 20px;
+	height: 35px;
+}
+.scwatbwsr_roomtype_add_table {
+    float: left;
+    width: 98%;
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    font-weight: 600;
+	color: teal;
+}
+.scwatbwsr_roomtype_add_tbcolor {
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}
+.scwatbwsr_roomtype_add_tbcolor_head {
+    float: left;
+	font-weight: 600;
+	width: 100%;
+	font-size: 12px;
+}
+.scwatbwsr_roomtype_add_tbcolor_input {
+    float: left;
+    margin-top: 5px;
+    height: 35px;
+    width: 100px;
+}
+.scwatbwsr_roomtype_add_tbcolor_button {
+    float: left;
+    background: #a36597;
+    color: #fff;
+    width: 90px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    margin-top: 5px;
+}
+.scwatbwsr_roomtype_add_tbshape {
+    float: left;
+    width: 100%;
+	margin-top: 20px;
+}
+.scwatbwsr_roomtype_add_tbshape_head {
+    float: left;
+    width: 100%;
+	margin-bottom: 5px;
+	font-weight: 600;
+	font-size: 12px;
+}
+.scwatbwsr_roomtype_add_tbshape_con {
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+}
+.scwatbwsr_roomtype_add_tbshape_con label {
+    float: left;
+    width: 80px;
+    font-size: 12px;
+    font-style: italic;
+}
+.scwatbwsr_roomtype_add_tbshape_rec {
+    float: left !important;
+    margin-left: 10px !important;
+    margin-top: 2px !important;
+}
+.scwatbwsr_roomtype_add_tbshape_rec_width ,
+.scwatbwsr_roomtype_add_tbshape_rec_height {
+    float: left;
+    margin-left: 10px;
+    height: 35px;
+    width: 120px;
+	font-size: 12px;
+}
+.scwatbwsr_roomtype_add_tbshape_cir {
+    float: left !important;
+    margin-left: 10px !important;
+    margin-top: 2px !important;
+}
+.scwatbwsr_roomtype_add_tbshape_cir_width {
+    float: left;
+    margin-left: 10px;
+    height: 35px;
+    width: 180px;
+	font-size: 12px;
+}
+.scwatbwsr_roomtype_add_seat {
+    float: left;
+    width: 98%;
+    clear: both;
+    border-top: 1px solid #ccc;
+    margin-top: 15px;
+    color: teal;
+    font-weight: 600;
+    padding-top: 10px;
+}
+.scwatbwsr_roomtype_add_seatcolor {
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}
+.scwatbwsr_roomtype_add_seatcolor_head {
+    float: left;
+	font-weight: 600;
+	width: 100%;
+	font-size: 12px;
+}
+.scwatbwsr_roomtype_add_seatcolor_input {
+    float: left;
+    margin-top: 5px;
+    height: 35px;
+    width: 100px;
+}
+.scwatbwsr_roomtype_add_seatcolor_button {
+    float: left;
+    background: #a36597;
+    color: #fff;
+    width: 90px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    margin-top: 5px;
+}
+.scwatbwsr_roomtype_add_seatshape {
+    float: left;
+    margin-top: 10px;
+	margin-right: 20px;
+}
+.scwatbwsr_roomtype_add_seatshape_head {
+    float: left;
+    width: 100%;
+	margin-bottom: 5px;
+	font-weight: 600;
+	font-size: 12px;
+}
+.scwatbwsr_roomtype_add_seatshape_con {
+    float: left;
+    margin-top: 5px;
+    margin-right: 20px;
+}
+.scwatbwsr_roomtype_add_seatshape_con label {
+    float: left;
+    font-size: 12px;
+    font-style: italic;
+}
+.scwatbwsr_roomtype_add_seatshape_rec {
+    float: left !important;
+    margin-left: 10px !important;
+    margin-top: 2px !important;
+}
+.scwatbwsr_roomtype_add_seatshape_cir {
+    float: left !important;
+    margin-left: 10px !important;
+    margin-top: 2px !important;
+}
+.scwatbwsr_roomtype_add_seat_size {
+    float: left;
+    clear: both;
+    width: 200px;
+    height: 35px;
+    margin-top: 10px;
+}
+.scwatbwsr_roomtype_add_button {
+    float: left;
+    background: #0073aa;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+    width: 120px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+	clear: both;
+}
+.scwatbwsr_roomtype_add_reload {
+    float: right;
+    margin-top: 20px;
+    background: #0073aa;
+    color: #fff;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.scwatbwsr_roomtype_items {
+    float: left;
+    width: 64%;
+	margin-left: 1%;
+}
+.scwatbwsr_roomtype_items_head {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+}
+.scwatbwsr_roomtype_item {
+    float: left;
+    width: 100%;
+	margin-top: 15px;
+}
+.scwatbwsr_roomtype_item_name {
+    float: left;
+    width: 15%;
+}
+.scwatbwsr_roomtype_item_name_shape {
+    font-size: 12px;
+    font-style: italic;
+}
+.scwatbwsr_roomtype_item_tbbg {
+    float: left;
+    width: 14%;
+    margin-left: 1%;
+}
+.scwatbwsr_roomtype_item_tbbg label {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_roomtype_item_tbbg_input {
+    float: left;
+    width: 100%;
+    height: 35px;
+}
+.scwatbwsr_roomtype_item_tbsize{
+    float: left;
+    width: 14%;
+    margin-left: 1%;
+}
+.scwatbwsr_roomtype_item_tbsize label {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_roomtype_item_tbsize_recwidth {
+    float: left;
+    width: 100%;
+	height: 35px;
+}
+.scwatbwsr_roomtype_item_tbsize_recheight {
+    float: left;
+    width: 100%;
+    height: 35px;
+}
+.scwatbwsr_roomtype_item_tbsize_cirwidth {
+    float: left;
+    width: 100%;
+    height: 35px;
+}
+.circle .scwatbwsr_roomtype_item_tbsize_recwidth ,
+.circle .scwatbwsr_roomtype_item_tbsize_recheight ,
+.rectangular .scwatbwsr_roomtype_item_tbsize_cirwidth {
+    display: none;
+}
+.scwatbwsr_roomtype_item_seatbg {
+    float: left;
+    width: 14%;
+    margin-left: 1%;
+}
+.scwatbwsr_roomtype_item_seatsize {
+    float: left;
+    width: 14%;
+    margin-left: 1%;
+}
+.scwatbwsr_roomtype_item_seatsize label {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_roomtype_item_seatbg_input {
+    float: left;
+    width: 100%;
+    height: 35px;
+}
+.scwatbwsr_roomtype_item_seatsize_width {
+    float: left;
+    width: 100%;
+	height: 35px;
+}
+.scwatbwsr_roomtype_item_save {
+    float: left;
+	background: #f7f7f7;
+	color: #0073aa;
+	width: 10%;
+	text-align: center;
+	height: 35px;
+	line-height: 35px;
+	cursor: pointer;
+	margin-left: 1%;
+	border: 1px solid #ccc;
+	font-weight: 600;
+}
+.scwatbwsr_roomtype_item_del {
+    float: left;
+	background: #f7f7f7;
+	color: #a00;
+	width: 12%;
+	text-align: center;
+	height: 35px;
+	line-height: 35px;
+	cursor: pointer;
+	margin-left: 1%;
+	border: 1px solid #ccc;
+	font-weight: 600;
+}
+.scwatbwsr_schedules_spec {
+    float: left;
+    width: 40%;
+}
+.scwatbwsr_schedules_spec_head {
+    float: left;
+    width: 100%;
+    margin-bottom: 5px;
+	font-weight: bold;
+}
+.scwatbwsr_schedules_spec_add {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_schedules_spec_list {
+    float: left;
+    width: 100%;
+	margin-top: 10px;
+}
+.scwatbwsr_schedules_spec_add_input {
+    float: left;
+	height: 35px;
+}
+.scwatbwsr_schedules_spec_button {
+    float: left;
+    background: #0073aa;
+    color: #fff;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-top: 1px;
+}
+.scwatbwsr_schedules_spec_add_reload {
+    float: right;
+    background: #0073aa;
+    color: #fff;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.scwatbwsr_schedules_spec_list_item {
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+}
+.scwatbwsr_schedules_spec_list_item_schedule {
+    float: left;
+	height: 35px;
+}
+.scwatbwsr_schedules_spec_list_item_save {
+    background: #f7f7f7;
+	color: #0073aa;
+	width: 120px;
+	float: left;
+	text-align: center;
+	margin-left: 5px;
+	cursor: pointer;
+	height: 34px;
+	line-height: 34px;
+	margin-top: 1px;
+	font-weight: 600;
+	border: 1px solid #ccc;
+}
+.scwatbwsr_schedules_spec_list_item_delete {
+    float: left;
+	background: #f7f7f7;
+	color: #a00;
+	width: 120px;
+	text-align: center;
+	margin-left: 5px;
+	margin-top: 1px;
+	height: 34px;
+	line-height: 34px;
+	cursor: pointer;
+	font-weight: 600;
+	border: 1px solid #ccc;
+}
+.scwatbwsr_schedules_or {
+    float: left;
+    width: 6%;
+    text-align: center;
+    color: #0073aa;
+    font-size: 15px;
+    font-weight: bold;
+}
+.scwatbwsr_schedules_or::after {
+    border: 1px solid #ccc;
+    content: "";
+    position: absolute;
+    height: 80%;
+    top: 45px;
+    left: 43%;
+}
+.scwatbwsr_schedules_right {
+    float: left;
+    width: 47%;
+	padding-left: 2%;
+}
+.scwatbwsr_schedules_right_head {
+    float: left;
+    width: 100%;
+    margin-bottom: 5px;
+	font-weight: bold;
+}
+.scwatbwsr_daily_schedules {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_daily_schedules_week {
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+}
+.scwatbwsr_daily_schedules_times {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+.scwatbwsr_daily_schedules_times_add {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_daily_schedules_times_list {
+    float: left;
+    width: 100%;
+	margin-top: 10px;
+}
+.scwatbwsr_daily_schedules_times_add_input {
+    float: left;
+	height: 35px;
+}
+.scwatbwsr_daily_schedules_times_add_button {
+    float: left;
+    width: 120px;
+    background: #0073aa;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 1px;
+}
+.scwatbwsr_daily_schedules_times_refresh_button {
+    float: left;
+    background: #0073aa;
+    color: #fff;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-left: 30px;
+}
+.scwatbwsr_daily_schedules_times_list_item {
+    margin-top: 5px;
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_daily_schedules_times_list_item_input {
+    float: left;
+	height: 35px;
+}
+.scwatbwsr_daily_schedules_times_list_item_button {
+    background: #f7f7f7;
+    color: #0073aa;
+    width: 120px;
+    float: left;
+    text-align: center;
+    margin-left: 5px;
+    cursor: pointer;
+    height: 34px;
+    line-height: 34px;
+    margin-top: 1px;
+	border: 1px solid #ccc;
+	font-weight: 600;
+}
+.scwatbwsr_daily_schedules_times_list_item_delete {
+    float: left;
+    background: #f7f7f7;
+    color: #a00;
+    width: 120px;
+    text-align: center;
+    margin-left: 5px;
+    margin-top: 1px;
+    height: 34px;
+    line-height: 34px;
+    cursor: pointer;
+	border: 1px solid #ccc;
+	font-weight: 600;
+}
+.scwatbwsr_prices {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_prices_item {
+    float: left;
+    width: 100%;
+	margin-top: 10px;
+}
+.scwatbwsr_prices_item_head {
+    float: left;
+    width: 15%;
+}
+.scwatbwsr_prices_item_price {
+    float: left;
+    margin-left: 1%;
+    height: 35px;
+}
+.scwatbwsr_prices_item_type {
+    float: left;
+    height: 35px !important;
+}
+.scwatbwsr_prices_save {
+    float: left;
+    width: 120px;
+    background: #0073aa;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    margin-top: 30px;
+    cursor: pointer;
+}
+.scwatbwsr_tables_add {
+    float: left;
+    width: 25%;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+}
+.scwatbwsr_tables_add_head {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+}
+.scwatbwsr_tables_add_label {
+    float: left;
+    clear: both;
+    width: 90%;
+    margin-top: 20px;
+    height: 35px;
+}
+.scwatbwsr_tables_add_seats {
+    float: left;
+    clear: both;
+    width: 90%;
+    margin-top: 10px;
+    height: 35px !important;
+}
+.scwatbwsr_tables_add_type {
+    float: left;
+    clear: both;
+    width: 90%;
+    margin-top: 10px;
+    height: 35px !important;
+}
+.scwatbwsr_tables_add_button {
+    float: left;
+    background: #0073aa;
+    color: #fff;
+    height: 35px;
+    line-height: 35px;
+    width: 120px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+    clear: both;
+}
+.scwatbwsr_tables_add_reload {
+    float: right;
+    margin-top: 20px;
+    background: #0073aa;
+    color: #fff;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.scwatbwsr_tables_list {
+    float: left;
+    width: 74%;
+    margin-left: 1%;
+}
+.scwatbwsr_tables_list_head {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+}
+.scwatbwsr_tables_list_item {
+    float: left;
+    width: 100%;
+    margin-top: 15px;
+}
+.scwatbwsr_tables_list_item_label {
+    float: left;
+    width: 10%;
+}
+.scwatbwsr_tables_list_item_seats {
+    float: left;
+    width: 150px;
+    height: 35px !important;
+}
+.scwatbwsr_tables_list_item_type {
+    float: left;
+    width: 150px;
+    height: 35px !important;
+}
+.scwatbwsr_tables_list_item_save {
+    float: left;
+    background: #f7f7f7;
+    color: #0073aa;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-left: 1%;
+    border: 1px solid #ccc;
+    font-weight: 600;
+}
+.scwatbwsr_tables_list_item_del {
+    float: left;
+    background: #f7f7f7;
+    color: #a00;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+    margin-left: 1%;
+    border: 1px solid #ccc;
+    font-weight: 600;
+}
+.scwatbwsr_mapping_listpreview {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+	text-align: center;
+}
+.scwatbwsr_mapping_preview {
+    display: inline-block;
+	max-width: 100%;
+	position: relative;
+}
+.scwatbwsr_mapping_preview_image {
+    width: 100%;
+	height: 100%;
+}
+.scwatbwsr_mapping_preview_color {
+    float: left;
+    width: 100%;
+    text-indent: -9999em;
+    height: 100%;
+}
+.scwatbwsr_mapping_preview_tables {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.topline{
+    position:absolute;
+    border-top:1px red dotted;
+    display:none;
+    vertical-align::middle;
+    top: -2px;
+}
+.botline{
+    position:absolute;
+    bottom:-2px;
+    border-bottom:1px red dotted;
+    display:none;
+    vertical-align::middle;
+    margin-top:500px;
+}
+.leftline{
+    position:absolute;
+    left:-2px;
+    border-left:1px red dotted;
+    display:none;
+    vertical-align::middle;
+}
+.rightline{
+    position:absolute;
+    right:-2px;
+    border-right:1px red dotted;
+    display:none;
+    vertical-align::middle;
+}
+.scwatbwsr_mapping_table{
+    cursor: move;
+    display: inline-block;
+	position: absolute;
+	color: #fff;
+	font-weight: bold;
+	border: 1px dotted rgb(204, 204, 204);
+}
+.scwatbwsr_mapping_table_seats{
+	display: inline-block;
+	position: relative;
+	color: #fff;
+}
+.scwatbwsr_mapping_table_seat{
+	cursor: move;
+    display: inline-block;
+	position: absolute;
+	color: #fff;
+	z-index: 99;
+}
+.scwatbwsr_mapping_table_label {
+    top: 0;
+    position: absolute;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: auto;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 9;
+}
+.scwatbwsr_mapping_preview_save {
+    background: #0073aa;
+    color: #fff;
+    margin-top: 30px;
+    display: inline-block;
+    width: 170px;
+    height: 35px;
+    line-height: 35px;
+    cursor: pointer;
+}
+.scwatbwsr_orders {
+    float: left;
+    width: 100%;
+}
+.scwatbwsr_orders_item {
+    float: left;
+    width: 100%;
+	margin-bottom: 20px;
+}
+.scwatbwsr_orders_item_head {
+    float: left;
+	font-weight: bold;
+}
+.scwatbwsr_orders_item_id,
+.scwatbwsr_orders_item_seats,
+.scwatbwsr_orders_item_schedule ,
+.scwatbwsr_orders_item_name ,
+.scwatbwsr_orders_item_address ,
+.scwatbwsr_orders_item_email ,
+.scwatbwsr_orders_item_phone ,
+.scwatbwsr_orders_item_note ,
+.scwatbwsr_orders_item_total {
+    float: left;
+    margin-left: 20px;
+}
+
+.scwatbwsr_orders_item_del {
+    background: #f7f7f7;
+    color: #a00;
+    width: 120px;
+    float: left;
+    text-align: center;
+    margin-left: 5px;
+    cursor: pointer;
+    height: 34px;
+    line-height: 34px;
+    margin-top: -10px;
+    font-weight: 600;
+    border: 1px solid #ccc;
+}
+.scwatbwsr_bktables {
+    float: left;
+	width: 100%;
+	height: 400px;
+	overflow-y: scroll;
+}
+.scwatbwsr_bktables_seat {
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}
+.scwatbwsr_bktables_seat_name {
+    float: left;
+}
+.scwatbwsr_bktables_seat_make {
+    float: left;
+    margin-left: 30px;
+}
+.scwatbwsr_bktables_seat_make .scw_spin {
+    color: teal;
+}
+.scwatbwsr_bktime {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+.scwatbwsr_bktime_label {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+}
+.scwatbwsr_bktime_ip {
+    float: left;
+    margin-top: 10px;
+    height: 35px;
+}
+.scwatbwsr_compulsory {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+.scwatbwsr_compulsory_label {
+    float: left;
+    font-weight: bold;
+}
+.scwatbwsr_compulsory_ip {
+    float: left;
+    margin-top: 3px !important;
+}
