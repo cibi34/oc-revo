@@ -143,6 +143,7 @@ function scwatbwsr_install(){
 		`roomid` int(11) DEFAULT NULL,
 		`tb` varchar(255) DEFAULT NULL,
 		`seat` varchar(255) DEFAULT NULL,
+		`proid` int(11) DEFAULT NULL,
 		PRIMARY KEY (`id`)
 	) $charset_collate;";
 	
@@ -269,11 +270,6 @@ function scwatbwsr_parameters(){
 						
 						$getProSql = $wpdb->prepare("SELECT * from {$proTb} where roomid=%d", $room->id);
 						$pro = $wpdb->get_results($getProSql);
-						if($pro){
-							$proid = $pro[0]->proid;
-							$getOrdersSql = $wpdb->prepare("SELECT * from {$ordersTb} where productId=%d", $proid);
-							$orders = $wpdb->get_results($getOrdersSql);
-						}else $orders = "";
 						?>
 						<div class="scwatbwsr_room">
 							<input class="scwatbwsr_room_id" value="<?php echo esc_attr($room->id) ?>" type="hidden">
@@ -314,7 +310,7 @@ function scwatbwsr_parameters(){
 										<span class="scwatbwsr_roombg">
 											<span class="scwatbwsr_roombg_label"><?php echo esc_html__("Room Background", "scwatbwsr-translate") ?></span>
 											<span class="scwatbwsr_roombg_con">
-												<input type="color" id="scwatbwsr_roombg_con_color" class="scwatbwsr_roombg_con_color" value="<?php echo esc_attr($roombgcolor) ?>">
+												<input type="color" id="scwatbwsr_roombg_con_color" class="scwatbwsr_roombg_con_color" value="<?php echo esc_attr("#000000") ?>">
 												<label for="scwatbwsr_roombg_con_color" class="scwatbwsr_roombg_con_color_button"><?php echo esc_html__("Pick Color", "scwatbwsr-translate") ?></label>
 												<span class="scwatbwsr_roombg_con_or"><?php echo esc_html__("OR", "scwatbwsr-translate") ?></span>
 												<span class="scwatbwsr_roombg_con_bgpreview">
@@ -683,75 +679,87 @@ function scwatbwsr_parameters(){
 											<span class="scwatbwsr_mapping_preview_save"><i class="fa fa-floppy-o" aria-hidden="true"></i> <?php echo esc_html__("Save Mapping", "scwatbwsr-translate") ?></span>
 										</span>
 									</section>
-								
+
+
 									<section id="scwatbwsr_content7<?php echo esc_attr($room->id) ?>" class="tab-content">
-										<span class="scwatbwsr_orders">
-											<?php
-												if($orders){
-													foreach($orders as $order){
-														?>
-														<span class="scwatbwsr_orders_item">
-															<input class="scwatbwsr_orders_item_oid" type="hidden" value="<?php echo esc_attr($order->id) ?>">
-															<span class="scwatbwsr_orders_item_head"><?php echo esc_html__("Order: ", "scwatbwsr-translate") ?></span>
-															<span class="scwatbwsr_orders_item_id">
-															<?php if($order->orderId){ ?>
-																<a target="_blank" href="<?php echo get_site_url() ?>/wp-admin/post.php?post=<?php echo esc_attr($order->orderId) ?>&action=edit"><?php echo esc_attr($order->orderId) ?></a>
-															<?php }else echo "by Form" ?>
-															</span>
-															<span class="scwatbwsr_orders_item_seats"><?php echo esc_attr(str_replace(",", " ", $order->seats)) ?></span>
-															<span class="scwatbwsr_orders_item_schedule"><?php if($order->schedule) echo esc_attr($order->schedule) ?></span>
-															<?php if($order->name){ ?>
-															<span class="scwatbwsr_orders_item_name"><?php if($order->name) echo esc_attr($order->name) ?></span>
-															<?php } ?>
-															<?php if($order->address){ ?>
-															<span class="scwatbwsr_orders_item_address"><?php if($order->address) echo esc_attr($order->address) ?></span>
-															<?php } ?>
-															<?php if($order->email){ ?>
-															<span class="scwatbwsr_orders_item_email"><?php if($order->email) echo esc_attr($order->email) ?></span>
-															<?php } ?>
-															<?php if($order->phone){ ?>
-															<span class="scwatbwsr_orders_item_phone"><?php if($order->phone) echo esc_attr($order->phone) ?></span>
-															<?php } ?>
-															<?php if($order->note){ ?>
-															<span class="scwatbwsr_orders_item_note"><?php if($order->note) echo esc_attr($order->note) ?></span>
-															<?php } ?>
-															<?php if($order->total){ ?>
-															<span class="scwatbwsr_orders_item_total"><?php if($order->total) echo esc_attr("$".$order->total) ?></span>
-															<?php } ?>
-															<span class="scwatbwsr_orders_item_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo esc_html__("Delete", "scwatbwsr-translate") ?></span>
-														</span>
-														<?php
-													}
-												}
-											?>
-										</span>
-										<span class="scwatbwsr_bktables">
-											<?php
-												if($tables){
-													foreach($tables as $table){
-														$seats = explode(",", $table->seats);
-														if($seats){
-															foreach($seats as $seat){
-																$getBookedSql = $wpdb->prepare("SELECT * from {$bookedTB} where roomid=%d and tb=%s and seat=%s", $room->id, $table->label, $seat);
-																$bookedseat = $wpdb->get_results($getBookedSql);
-																?>
-																<span class="scwatbwsr_bktables_seat">
-																	<span class="scwatbwsr_bktables_seat_name"><?php echo esc_attr($table->label .".".$seat) ?></span>
-																	<span class="scwatbwsr_bktables_seat_make">
-																		<label><?php echo esc_html__("Make as booked", "scwatbwsr-translate") ?></label>
-																		<input <?php if($bookedseat) echo "checked" ?> type="checkbox" class="scwatbwsr_bktables_seat_make_input">
-																	</span>
-																</span>
-																<?php
-															}
-														}
-														?>
-														<span style="float: left;width: 100%;font-weight: bold;">--------------------------------</span>
-														<?php
-													}
-												}
-											?>
-										</span>
+                                        <?php
+                                        foreach($pro as $event){
+                                            $getOrdersSql = $wpdb->prepare("SELECT * from {$ordersTb} where productId=%d", $event->proid);
+                                            $orders = $wpdb->get_results($getOrdersSql);
+                                            ?>
+                                            <div class="scwatbwsr_event" data-id="<?php echo $event->proid; ?>">
+                                                <div class="scwatbwsr_event_id"> <?php echo $event->proid; ?>  </div>
+                                                <span class="scwatbwsr_orders">
+                                                <?php
+                                                    if($orders){
+                                                        foreach($orders as $order){
+                                                            ?>
+                                                            <span class="scwatbwsr_orders_item">
+                                                                <input class="scwatbwsr_orders_item_oid" type="hidden" value="<?php echo esc_attr($order->id) ?>">
+                                                                <span class="scwatbwsr_orders_item_head"><?php echo esc_html__("Order: ", "scwatbwsr-translate") ?></span>
+                                                                <span class="scwatbwsr_orders_item_id">
+                                                                <?php if($order->orderId){ ?>
+                                                                    <a target="_blank" href="<?php echo get_site_url() ?>/wp-admin/post.php?post=<?php echo esc_attr($order->orderId) ?>&action=edit"><?php echo esc_attr($order->orderId) ?></a>
+                                                                <?php }else echo "by Form" ?>
+                                                                </span>
+                                                                <span class="scwatbwsr_orders_item_seats"><?php echo esc_attr(str_replace(",", " ", $order->seats)) ?></span>
+                                                                <span class="scwatbwsr_orders_item_schedule"><?php if($order->schedule) echo esc_attr($order->schedule) ?></span>
+                                                                <?php if($order->name){ ?>
+                                                                <span class="scwatbwsr_orders_item_name"><?php if($order->name) echo esc_attr($order->name) ?></span>
+                                                                <?php } ?>
+                                                                <?php if($order->address){ ?>
+                                                                <span class="scwatbwsr_orders_item_address"><?php if($order->address) echo esc_attr($order->address) ?></span>
+                                                                <?php } ?>
+                                                                <?php if($order->email){ ?>
+                                                                <span class="scwatbwsr_orders_item_email"><?php if($order->email) echo esc_attr($order->email) ?></span>
+                                                                <?php } ?>
+                                                                <?php if($order->phone){ ?>
+                                                                <span class="scwatbwsr_orders_item_phone"><?php if($order->phone) echo esc_attr($order->phone) ?></span>
+                                                                <?php } ?>
+                                                                <?php if($order->note){ ?>
+                                                                <span class="scwatbwsr_orders_item_note"><?php if($order->note) echo esc_attr($order->note) ?></span>
+                                                                <?php } ?>
+                                                                <?php if($order->total){ ?>
+                                                                <span class="scwatbwsr_orders_item_total"><?php if($order->total) echo esc_attr("$".$order->total) ?></span>
+                                                                <?php } ?>
+                                                                <span class="scwatbwsr_orders_item_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo esc_html__("Delete", "scwatbwsr-translate") ?></span>
+                                                            </span>
+                                                            <?php
+                                                            }
+                                                        }
+                                                    ?>
+                                                </span>
+                                                <span class="scwatbwsr_bktables">
+                                                    <?php
+                                                        if($tables){
+                                                            foreach($tables as $table){
+                                                                $seats = explode(",", $table->seats);
+                                                                if($seats){
+                                                                    foreach($seats as $seat){
+                                                                        $getBookedSql = $wpdb->prepare("SELECT * from {$bookedTB} where roomid=%d and tb=%s and seat=%s and proid=%d", $room->id, $table->label, $seat, $event->proid);
+                                                                        $bookedseat = $wpdb->get_results($getBookedSql);
+                                                                        ?>
+                                                                        <span class="scwatbwsr_bktables_seat">
+                                                                            <span class="scwatbwsr_bktables_seat_name"><?php echo esc_attr($table->label .".".$seat) ?></span>
+                                                                            <span class="scwatbwsr_bktables_seat_make">
+                                                                                <label><?php echo esc_html__("Make as booked", "scwatbwsr-translate") ?></label>
+                                                                                <input <?php if($bookedseat) echo "checked" ?> type="checkbox" class="scwatbwsr_bktables_seat_make_input">
+                                                                            </span>
+                                                                        </span>
+                                                                        <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                                <span style="float: left;width: 100%;font-weight: bold;">--------------------------------</span>
+                                                                <?php
+                                                            }
+                                                        }
+                                                    ?>
+                                                </span>
+                                            </div>
+                                        <?php }
+                                        ?>
+
 									</section>
 									
 								</div>
@@ -828,7 +836,7 @@ function scwatbwsr_fontend_single(){
 	global $wpdb;
 	$proId = $product->get_id();
 	$currencyS = get_woocommerce_currency_symbol();
-	
+
 	$tableRooms = $wpdb->prefix . 'scwatbwsr_rooms';
 	$tableProducts = $wpdb->prefix . 'scwatbwsr_products';
 	$tableTypes = $wpdb->prefix . 'scwatbwsr_types';
@@ -838,35 +846,35 @@ function scwatbwsr_fontend_single(){
 	$seatsTb = $wpdb->prefix . 'scwatbwsr_seats';
 	$ordersTb = $wpdb->prefix . 'scwatbwsr_orders';
 	$bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
-	
+
 	$getRoomSql = $wpdb->prepare("SELECT * from {$tableProducts} where proid=%d", $proId);
 	$room = $wpdb->get_results($getRoomSql);
-	
+
 	if($room){
 		$roomid = $room[0]->roomid;
-		
+
 		wp_register_script('datetimepicker', SCWATBWSR_URL .'datetimepicker/jquery.datetimepicker.full.min.js');
 		wp_enqueue_script('datetimepicker');
 		wp_register_style('datetimepicker', SCWATBWSR_URL .'datetimepicker/jquery.datetimepicker.css');
 		wp_enqueue_style('datetimepicker');
-		
+
 		wp_register_script('panzoom', 'https://cdn.jsdelivr.net/npm/@panzoom/panzoom/dist/panzoom.min.js');
 		wp_enqueue_script('panzoom');
-		
+
 		wp_register_script('scwatbwsr-script-frontend', SCWATBWSR_URL .'js/front.js');
 		wp_enqueue_script('scwatbwsr-script-frontend');
 		wp_register_style('scwatbwsr-style-frontend', SCWATBWSR_URL .'css/front.css?v=1.0');
 		wp_enqueue_style('scwatbwsr-style-frontend');
-		
+
 		$getRoomDataSql = $wpdb->prepare("SELECT * from {$tableRooms} where id=%d", $roomid);
 		$roomData = $wpdb->get_results($getRoomDataSql);
-		
+
 		$getTypeSql = $wpdb->prepare("SELECT * from {$tableTypes} where roomid=%d", $roomid);
 		$types = $wpdb->get_results($getTypeSql);
-		
+
 		$getSchedulesSql = $wpdb->prepare("SELECT * from {$tableSchedules} where roomid=%d", $roomid);
 		$checkSchedules = $wpdb->get_results($getSchedulesSql);
-		
+
 		if(isset($roomData[0]->tbbookedcolor))
 			$tbbookedcolor = $roomData[0]->tbbookedcolor;
 		else
@@ -875,10 +883,10 @@ function scwatbwsr_fontend_single(){
 			$seatbookedcolor = $roomData[0]->seatbookedcolor;
 		else
 			$seatbookedcolor = "#000";
-		
+
 		$getTablesSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d", $roomid);
 		$tables = $wpdb->get_results($getTablesSql);
-		
+
 		$bookedSeats = array();
 		$getOrdersSql = $wpdb->prepare("SELECT * from {$ordersTb} where productId=%d", $proId);
 		$orders = $wpdb->get_results($getOrdersSql);
@@ -937,7 +945,7 @@ function scwatbwsr_fontend_single(){
 					<span class="scwatbwsr_types_item_bg" style="background: <?php echo esc_attr($tbbookedcolor) ?>">bg</span>
 				</span>
 			</div>
-			
+
 			<div class="scwatbwsr_schedules <?php if($checkSchedules){ ?>scwatbwsr_schedules_special<?php }else{ ?>scwatbwsr_schedules_daily<?php } ?>">
 				<?php
 				if($checkSchedules){
@@ -949,7 +957,7 @@ function scwatbwsr_fontend_single(){
 					$arroDay = array(0, 1, 2, 3, 4, 5, 6);
 					$arrDay = array();
 					$arrTime = "";
-					
+
 					$tableDailySchedules = $wpdb->prefix . 'scwatbwsr_dailyschedules';
 					$getDSSql = $wpdb->prepare("SELECT * from {$tableDailySchedules} where roomid=%d", $roomid);
 					$getDSRs = $wpdb->get_results($getDSSql);
@@ -974,7 +982,7 @@ function scwatbwsr_fontend_single(){
 						}
 					}
 					$arrfDay = array_diff($arroDay, $arrDay);
-					
+
 					$tableDailyTimes = $wpdb->prefix . 'scwatbwsr_dailytimes';
 					$getDTSql = $wpdb->prepare("SELECT * from {$tableDailyTimes} where roomid=%d", $roomid);
 					$times = $wpdb->get_results($getDTSql);
@@ -986,7 +994,7 @@ function scwatbwsr_fontend_single(){
 								$arrTime .= $time->time;
 						}
 					}
-	
+
 					?>
 					<div class="scwatbwsr_schedules_header"><?php echo esc_html__("Please choose schedule first!", "scwatbwsr-translate") ?></div>
 					<input class="array_dates" type="hidden" value='<?php echo json_encode($arrfDay, 1) ?>'>
@@ -996,7 +1004,7 @@ function scwatbwsr_fontend_single(){
 				}
 				?>
 			</div>
-			
+
 			<div class="scwatbwsr_map">
 				<div class="scwatbwsr_map_head"><?php echo esc_html__("Choose your Seats", "scwatbwsr-translate") ?></div>
 				<div class="scwatbwsr_map_zoom">
@@ -1007,7 +1015,7 @@ function scwatbwsr_fontend_single(){
 				<div class="scwatbwsr_map_block">
 				<div id="scwatbwsr_map_panzoom">
 					<div class="scwatbwsr_map_bg" style="width: <?php echo esc_attr($roomData[0]->width) ?>px; height: <?php echo esc_attr($roomData[0]->height) ?>px">
-						
+
 						<?php
 							if(isset($roomData[0]->roombg)){
 								?><img class="scwatbwsr_map_bg_img" src="<?php echo esc_attr($roomData[0]->roombg) ?>"><?php
@@ -1021,7 +1029,7 @@ function scwatbwsr_fontend_single(){
 									foreach($tables as $table){
 										$getType = $wpdb->prepare("SELECT * from {$tableTypes} where id=%d", $table->type);
 										$type = $wpdb->get_results($getType);
-										
+
 										$seats = explode(",", $table->seats);
 										if($seats){
 											$tmpArr = array();
@@ -1035,15 +1043,15 @@ function scwatbwsr_fontend_single(){
 												$tbcolor = $type[0]->tbbg;
 										}else
 											$tbcolor = $type[0]->tbbg;
-										
+
 										if($table->tleft) $tleft = $table->tleft;
 										else $tleft = 0;
-										
+
 										if($table->ttop) $ttop = $table->ttop;
 										else $ttop = 0;
-										
+
 										$padding = $type[0]->seatwidth + 2;
-										
+
 										$style = 'background: '.$tbcolor.' none repeat scroll 0% 0% padding-box content-box;left: '.$tleft.'px;top: '.$ttop.'px;padding: '.$padding.'px;';
 										$labelStyle = 'top: '.($type[0]->seatwidth + 2).'px;left: '.($type[0]->seatwidth + 2).'px;';
 										if($type[0]->tbshape == "rectangular"){
@@ -1053,13 +1061,13 @@ function scwatbwsr_fontend_single(){
 											$style .= 'width: '.($type[0]->tbcirwidth + ($type[0]->seatwidth + 2)*2).'px; height: '.($type[0]->tbcirwidth + ($type[0]->seatwidth + 2)*2).'px;line-height: '.($type[0]->tbcirwidth + ($type[0]->seatwidth + 2)*2).'px;border-radius: '.$type[0]->tbcirwidth .'px';
 											$labelStyle .= 'width: '.$type[0]->tbcirwidth .'px; height: '.$type[0]->tbcirwidth .'px; line-height: '.$type[0]->tbcirwidth .'px;border-radius: '.$type[0]->tbcirwidth .'px';
 										}
-										
+
 										$seatstyle = '';
 										if($type[0]->seatshape == "rectangular")
 											$seatstyle .= 'width: '.$type[0]->seatwidth .'px; height: '.$type[0]->seatwidth .'px;line-height: '.$type[0]->seatwidth .'px;';
 										else
 											$seatstyle .= 'width: '.$type[0]->seatwidth .'px; height: '.$type[0]->seatwidth .'px;line-height: '.$type[0]->seatwidth .'px;border-radius: '.$type[0]->seatwidth .'px;';
-										
+
 										?>
 										<span id="table<?php echo esc_attr($table->label) ?>" class="scwatbwsr_map_tables_table" style="<?php echo esc_attr($style) ?>">
 											<input type="hidden" class="scwatbwsr_table_readcolor" value="<?php echo esc_attr($type[0]->tbbg) ?>">
@@ -1076,12 +1084,12 @@ function scwatbwsr_fontend_single(){
 														$seatdt = $wpdb->get_results($getSeatDt);
 														if(isset($seatdt[0]->tleft)) $sleft = $seatdt[0]->tleft;
 														else $sleft = 0;
-														
+
 														if(isset($seatdt[0]->ttop)) $stop = $seatdt[0]->ttop;
 														else $stop = 0;
-														
+
 														$newseatstyle = $seatstyle.'left: '.$sleft.'px; top: '.$stop.'px;';
-														
+
 														if(in_array($table->label .".".$seat, $bookedSeats))
 															$newseatstyle .= 'background: '.$seatbookedcolor.';';
 														else
@@ -1110,9 +1118,9 @@ function scwatbwsr_fontend_single(){
 add_filter( 'woocommerce_cart_item_price', 'scwatbwsr_change_product_price_display', 10, 3 );
 function scwatbwsr_change_product_price_display( $price, $product ){
 	global $wpdb;
-	
+
 	$proId = $product["product_id"];
-	
+
 	$customString = "";
 	if(isset($_SESSION["seats".$proId])){
 		$customString .= "<br>".esc_html__("Booked Seats", "scwatbwsr-translate").": ".str_replace("@", " ", $_SESSION["seats".$proId]);
@@ -1130,10 +1138,10 @@ function scwatbwsr_add_custom_price( $cart_object ){
 	global $wpdb;
 	global $woocommerce;
 	$woove = $woocommerce->version;
-	
+
     if ( is_admin() && !defined('DOING_AJAX') )
         return;
-	
+
 	foreach ( $cart_object->get_cart() as $cart_item ) {
 		if( (float)$woove < 3 ){
 			$proId = $cart_item['data']->id;
@@ -1144,32 +1152,32 @@ function scwatbwsr_add_custom_price( $cart_object ){
 			$sale_price = $cuprice["sale_price"];
 			if(!$sale_price) $sale_price = $cuprice["regular_price"];
 		}
-		
+
 		$proTb = $wpdb->prefix . 'scwatbwsr_products';
 		$tablesTb = $wpdb->prefix . 'scwatbwsr_tables';
 		$pricesTb = $wpdb->prefix . 'scwatbwsr_prices';
-		
+
 		$getRoomSql = $wpdb->prepare("SELECT * from {$proTb} where proid=%d", $proId);
 		$room = $wpdb->get_results($getRoomSql);
 		$roomid = $room[0]->roomid;
-		
+
 		$total = 0;
-		
+
 		if(isset($_SESSION["seats".$proId])){
 			$seats = explode("@", $_SESSION["seats".$proId]);
 			$pertbArr = array();
 			$onetimeArr = array();
-			
+
 			foreach($seats as $seat){
 				$checkseat = explode(".", $seat);
-				
+
 				$getTypeSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d and label=%s", $roomid, $checkseat[0]);
 				$getType = $wpdb->get_results($getTypeSql);
 				$typeid = $getType[0]->type;
-				
+
 				$getPriceSql = $wpdb->prepare("SELECT * from {$pricesTb} where typeid=%d", $typeid);
 				$getPrice = $wpdb->get_results($getPriceSql);
-				
+
 				if($getPrice && $getPrice[0]->price){
 					if($getPrice[0]->type == "seat"){
 						$total += $getPrice[0]->price;
@@ -1186,14 +1194,14 @@ function scwatbwsr_add_custom_price( $cart_object ){
 					}
 				}
 			}
-			
+
 			$pertbArr = array_map("unserialize", array_unique(array_map("serialize", $pertbArr)));
 			if($pertbArr)
 				$total += $pertbArr[0]["price"] * count($pertbArr);
 			if($onetimeArr)
 				$total += $onetimeArr[0]["price"];
 		}
-		
+
 		if($total)
 			$cart_item['data']->set_price( ((float)$total / $cart_item['quantity']) + $sale_price );
 	}
@@ -1203,28 +1211,28 @@ add_filter( 'woocommerce_order_item_name', 'scwatbwsr_order_complete' , 10, 2 );
 function scwatbwsr_order_complete( $link, $item ){
 	global $wpdb;
 	global $wp;
-	
+
 	$proId = $item["product_id"];
 	$order_id  = absint($wp->query_vars['order-received']);
-	
+
 	$customString = "";
 	if($proId && $order_id){
 		$orderTable = $wpdb->prefix . 'scwatbwsr_orders';
-		
+
 		if(isset($_SESSION["seats".$proId])){
 			$checkSeats = explode("@", $_SESSION["seats".$proId]);
 			$insetArr = $checkSeats;
 			$boughtArr = array();
-			
+
 			$customString .= "<br>".esc_html__("Booked Seats", "scwatbwsr-translate").": ";
-			
+
 			foreach($checkSeats as $ks=>$seat){
 				if(isset($_SESSION["schedule".$proId]))
 					$checkOrder = $wpdb->prepare("SELECT * from {$orderTable} where FIND_IN_SET(%s, seats) and productId=%d and schedule=%s", $seat, $proId, $_SESSION["schedule".$proId]);
 				else
 					$checkOrder = $wpdb->prepare("SELECT * from {$orderTable} where FIND_IN_SET(%s, seats) and productId=%d", $seat, $proId);
 				$checkOrderRs = $wpdb->get_results($checkOrder);
-				
+
 				if(isset($checkOrderRs[0]->seats)){
 					unset($insetArr[$ks]);
 					array_push($boughtArr, $seat);
@@ -1232,22 +1240,22 @@ function scwatbwsr_order_complete( $link, $item ){
 			}
 			if($insetArr){
 				$wpdb->query($wpdb->prepare("INSERT INTO $orderTable (`productId`, `orderId`, `seats`, `schedule`)
-				VALUES (%d, %s, %s, %s)", 
+				VALUES (%d, %s, %s, %s)",
 				$proId, $order_id, implode(",", $insetArr), $_SESSION["schedule".$proId]));
-				
+
 				$customString .= "<br>".implode(" ", $insetArr);
 			}
 			if($boughtArr){
 				$customString .= "<br>These seats no longer available: ".implode(" ", $boughtArr);
 			}
-			
+
 			if(isset($_SESSION["schedule".$proId])){
 				$customString .= "<br>";
 				$customString .= esc_html__("Schedule", "scwatbwsr-translate").": ".$_SESSION["schedule".$proId];
 			}
 		}
 	}
-	
+
 	$allowed_html = ['br' => [], 'span' => []];
 	echo wp_kses($link.$customString, $allowed_html);
 }
@@ -1257,15 +1265,15 @@ function scwatbwsr_admin_edit_order( $item_id, $item, $product ){
 	global $wpdb;
 	$proId = $product->get_id();
     $postId = $_GET['post'];
-	
+
 	$orderSeatTable = $wpdb->prefix . 'scwatbwsr_orders';
 	$selectTypeSql = $wpdb->prepare("SELECT * from {$orderSeatTable} where productId=%d and orderId=%s", $proId, $postId);
 	$orderSeats = $wpdb->get_results($selectTypeSql);
-	
+
 	if($orderSeats){
 		echo "<br>";
 		echo esc_html__("Booked Seats", "scwatbwsr-translate").": ".str_replace(",", " ", $orderSeats[0]->seats);
-		
+
 		if($orderSeats[0]->schedule)
 			echo "<br>".esc_html__("Schedule", "scwatbwsr-translate").": ".$orderSeats[0]->schedule;
 	}
@@ -1274,7 +1282,7 @@ function scwatbwsr_admin_edit_order( $item_id, $item, $product ){
 function scwatbwsr_cart_updated( $removed_cart_item_key, $cart ) {
     $line_item = $cart->removed_cart_contents[ $removed_cart_item_key ];
     $product_id = $line_item[ 'product_id' ];
-	
+
 	unset($_SESSION["seats".$product_id]);
 	unset($_SESSION["schedule".$product_id]);
 };
@@ -1406,7 +1414,7 @@ function scwatbwsr_content($content){
 				}
 			}
 		}
-		$getBookedSql = $wpdb->prepare("SELECT * from {$bookedTB} where roomid=%d", $roomid);
+		$getBookedSql = $wpdb->prepare("SELECT * from {$bookedTB} where roomid=%d and proid=%d", $roomid, $proId);
 		$bookeds = $wpdb->get_results($getBookedSql);
 		if($bookeds){
 			foreach($bookeds as $bk){
@@ -1673,6 +1681,7 @@ function scwatbwsr_content($content){
 }
 
 
+// CUSTOM
 
 /**
  * This will fire at the very end of a (successful) form entry.
@@ -1686,12 +1695,26 @@ function scwatbwsr_content($content){
  */
 
 function wpf_dev_process_complete( $fields, $entry, $form_data, $entry_id ) {
-    error_log( json_encode($fields));
-//    global $wpdb;
-//    $table_name = $wpdb->prefix . 'scwatbwsr_orders';
-//    $wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
-//	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-//        1, "", 2, 3, "name", "dadres 2", "", "", "", ""));
+    function getValueById(int $id, array $array) {
+        $value = "";
+        foreach($array AS $index=>$json) {
+            if($json['id'] == $id) {
+                $value = $json['value'];
+            }
+        }
+        return $value;
+    }
+
+    $name = getValueById(2, $fields);
+    $email = getValueById(3, $fields);
+    $table  = getValueById(6, $fields);
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'scwatbwsr_orders';
+    $wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
+	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+        $entry['post_id'], "", $table, " ", $name, " ", $email, " ", " ", " "));
 }
+
 add_action( 'wpforms_process_complete', 'wpf_dev_process_complete', 10, 4 );
 

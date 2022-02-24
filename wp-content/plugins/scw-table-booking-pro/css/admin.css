@@ -1006,7 +1006,7 @@ p.submit {
     position:absolute;
     border-top:1px red dotted;
     display:none;
-    vertical-align::middle;
+    vertical-align: middle;
     top: -2px;
 }
 .botline{
@@ -1014,7 +1014,7 @@ p.submit {
     bottom:-2px;
     border-bottom:1px red dotted;
     display:none;
-    vertical-align::middle;
+    vertical-align: middle;
     margin-top:500px;
 }
 .leftline{
@@ -1022,14 +1022,14 @@ p.submit {
     left:-2px;
     border-left:1px red dotted;
     display:none;
-    vertical-align::middle;
+    vertical-align: middle;
 }
 .rightline{
     position:absolute;
     right:-2px;
     border-right:1px red dotted;
     display:none;
-    vertical-align::middle;
+    vertical-align: middle;
 }
 .scwatbwsr_mapping_table{
     cursor: move;
@@ -1117,7 +1117,7 @@ p.submit {
 .scwatbwsr_bktables {
     float: left;
 	width: 100%;
-	height: 400px;
+	height: 100%;
 	overflow-y: scroll;
 }
 .scwatbwsr_bktables_seat {

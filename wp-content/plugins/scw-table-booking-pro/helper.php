@@ -522,19 +522,20 @@ if($task == "add_room"){
 }elseif($task == "make_as_booked"){
 	$roomId = filter_var($_POST["roomId"], FILTER_VALIDATE_INT);
 	$seat = filter_var($_POST["seat"], FILTER_SANITIZE_STRING);
-	
+	$proid = filter_var($_POST["proid"], FILTER_VALIDATE_INT);
+
 	$cseat = explode(".", $seat);
 	
 	$bookedTb = $wpdb->prefix . 'scwatbwsr_bookedseats';
-	$getdtSql = $wpdb->prepare("SELECT * from {$bookedTb} where roomid=%d and tb=%s and seat=%s", $roomId, $cseat[0], $cseat[1]);
+	$getdtSql = $wpdb->prepare("SELECT * from {$bookedTb} where roomid=%d and tb=%s and seat=%s and proid=%d", $roomId, $cseat[0], $cseat[1], $proid);
 	$rs = $wpdb->get_results($getdtSql);
 	
 	if($rs){
-		$wpdb->query($wpdb->prepare("DELETE FROM $bookedTb where roomid=%d and tb=%s and seat=%s", $roomId, $cseat[0], $cseat[1]));
+		$wpdb->query($wpdb->prepare("DELETE FROM $bookedTb where roomid=%d and tb=%s and seat=%s and proid=%d", $roomId, $cseat[0], $cseat[1], $proid));
 	}else{
-		$wpdb->query($wpdb->prepare("INSERT INTO $bookedTb (roomid, tb, seat)
-		VALUES (%d, %s, %s)", 
-		$roomId, $cseat[0], $cseat[1]));
+		$wpdb->query($wpdb->prepare("INSERT INTO $bookedTb (roomid, tb, seat, proid)
+		VALUES (%d, %s, %s, %d)",
+		$roomId, $cseat[0], $cseat[1], $proid));
 	}
 }elseif($task == "send_mail"){
 	$name = $_POST["name"];

@@ -18,7 +18,7 @@
 	var fh = bw/100*phantram;
 	jQuery(".scwatbwsr_map_block").css("height", fh+"px");*/
 	
-	jQuery(".woocommerce-tabs").before(jQuery(".scwatbwsr_content").show());
+	jQuery(".tbf").before(jQuery(".scwatbwsr_content").show());
 	jQuery(".scwatbwsr_content").after(jQuery("form.cart"));
 	
 	if(compulsory == "yes")
@@ -169,15 +169,15 @@
 						thistb.find(".scwatbwsr_map_tables_table_seat").addClass("active");
 
 
-						jQuery(".tbf-selected-table>input").val(jQuery(this).text().trim());
+						jQuery(".tbf-selected-table>input").val(getSeats());
 					}
 					sessSeat();
 				}
 			}
 		});
 	});
-	
-	function sessSeat(){
+
+	function getSeats(){
 		var seats = "";
 		jQuery(".scwatbwsr_map_tables_table").each(function(){
 			var tbname = jQuery(this).children(".scwatbwsr_map_tables_table_label").text().trim();
@@ -188,6 +188,13 @@
 					seats += tbname+"."+jQuery(this).text().trim();
 			});
 		});
+		return seats;
+
+	}
+	
+	function sessSeat(){
+		var seats = getSeats();
+
 		
 		jQuery.ajax({
 			type: "POST",

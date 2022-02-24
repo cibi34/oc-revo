@@ -767,6 +767,7 @@ var upload_image_button=false;
 		//////////
 		elthis.find(".scwatbwsr_bktables_seat").each(function(){
 			var thiss = jQuery(this);
+			var tid = thiss.parent();
 			
 			thiss.find(".scwatbwsr_bktables_seat_make_input").on("change", function(){
 				jQuery.ajax({
@@ -774,6 +775,7 @@ var upload_image_button=false;
 					data: {
 						roomId : roomId,
 						seat : thiss.children(".scwatbwsr_bktables_seat_name").text().trim(),
+						proid: tid.parent().attr("data-id"),
 						task : "make_as_booked"
 					},
 					type: 'POST',
