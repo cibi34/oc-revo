@@ -1634,35 +1634,35 @@ function scwatbwsr_content($content){
 				</div>
 			</div>
 			
-			<div class="scwatbwsr_form">
-				<div class="scwatbwsr_total">
-					<span><?php echo esc_html__("Total: $", "scwatbwsr-translate") ?></span>
-					<span class="scwatbwsr_total_value">0</span>
-				</div>
-				<div class="scwatbwsr_sendform">
-					<div class="scwatbwsr_form_item scw_form_name">
-						<label><?php echo esc_html__("Name", "scwatbwsr-translate") ?></label>
-						<input class="scwatbwsr_form_name_input" type="text">
-					</div>
-					<div class="scwatbwsr_form_item scw_form_address">
-						<label><?php echo esc_html__("Address", "scwatbwsr-translate") ?></label>
-						<input class="scwatbwsr_form_address_input" type="text">
-					</div>
-					<div class="scwatbwsr_form_item scw_form_email">
-						<label><?php echo esc_html__("Email", "scwatbwsr-translate") ?></label>
-						<input class="scwatbwsr_form_email_input" type="text">
-					</div>
-					<div class="scwatbwsr_form_item scw_form_phone">
-						<label><?php echo esc_html__("Phone", "scwatbwsr-translate") ?></label>
-						<input class="scwatbwsr_form_phone_input" type="text">
-					</div>
-					<div class="scwatbwsr_form_item scw_form_note">
-						<label><?php echo esc_html__("Note", "scwatbwsr-translate") ?></label>
-						<textarea class="scwatbwsr_form_note_input"></textarea>
-					</div>
-					<div class="scwatbwsr_form_item"><span class="scwatbwsr_form_submit"><?php echo esc_html__("Submit", "scwatbwsr-translate") ?></span></div>
-				</div>
-			</div>
+<!--			<div class="scwatbwsr_form">-->
+<!--				<div class="scwatbwsr_total">-->
+<!--					<span>--><?php //echo esc_html__("Total: $", "scwatbwsr-translate") ?><!--</span>-->
+<!--					<span class="scwatbwsr_total_value">0</span>-->
+<!--				</div>-->
+<!--				<div class="scwatbwsr_sendform">-->
+<!--					<div class="scwatbwsr_form_item scw_form_name">-->
+<!--						<label>--><?php //echo esc_html__("Name", "scwatbwsr-translate") ?><!--</label>-->
+<!--						<input class="scwatbwsr_form_name_input" type="text">-->
+<!--					</div>-->
+<!--					<div class="scwatbwsr_form_item scw_form_address">-->
+<!--						<label>--><?php //echo esc_html__("Address", "scwatbwsr-translate") ?><!--</label>-->
+<!--						<input class="scwatbwsr_form_address_input" type="text">-->
+<!--					</div>-->
+<!--					<div class="scwatbwsr_form_item scw_form_email">-->
+<!--						<label>--><?php //echo esc_html__("Email", "scwatbwsr-translate") ?><!--</label>-->
+<!--						<input class="scwatbwsr_form_email_input" type="text">-->
+<!--					</div>-->
+<!--					<div class="scwatbwsr_form_item scw_form_phone">-->
+<!--						<label>--><?php //echo esc_html__("Phone", "scwatbwsr-translate") ?><!--</label>-->
+<!--						<input class="scwatbwsr_form_phone_input" type="text">-->
+<!--					</div>-->
+<!--					<div class="scwatbwsr_form_item scw_form_note">-->
+<!--						<label>--><?php //echo esc_html__("Note", "scwatbwsr-translate") ?><!--</label>-->
+<!--						<textarea class="scwatbwsr_form_note_input"></textarea>-->
+<!--					</div>-->
+<!--					<div class="scwatbwsr_form_item"><span class="scwatbwsr_form_submit">--><?php //echo esc_html__("Submit", "scwatbwsr-translate") ?><!--</span></div>-->
+<!--				</div>-->
+<!--			</div>-->
 		</div>
 		<?php
 		$string = ob_get_contents();
@@ -1671,3 +1671,27 @@ function scwatbwsr_content($content){
 	}
 	return $content;
 }
+
+
+
+/**
+ * This will fire at the very end of a (successful) form entry.
+ *
+ * @link  https://wpforms.com/developers/wpforms_process_complete/
+ *
+ * @param array  $fields    Sanitized entry field values/properties.
+ * @param array  $entry     Original $_POST global.
+ * @param array  $form_data Form data and settings.
+ * @param int    $entry_id  Entry ID. Will return 0 if entry storage is disabled or using WPForms Lite.
+ */
+
+function wpf_dev_process_complete( $fields, $entry, $form_data, $entry_id ) {
+    error_log( json_encode($fields));
+//    global $wpdb;
+//    $table_name = $wpdb->prefix . 'scwatbwsr_orders';
+//    $wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
+//	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+//        1, "", 2, 3, "name", "dadres 2", "", "", "", ""));
+}
+add_action( 'wpforms_process_complete', 'wpf_dev_process_complete', 10, 4 );
+

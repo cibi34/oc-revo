@@ -560,8 +560,9 @@ if($task == "add_room"){
 	$body .= 'Note: '.$note.'<br>';
 	$body .= 'Total: '.$total.'<br>';
 	$headers = array('Content-Type: text/html; charset=UTF-8');
-	 
-	echo wp_mail( array($email, $adminEmail), $subject, $body, $headers );
+
+    echo 1;
+	//echo wp_mail( array($email, $adminEmail), $subject, $body, $headers );
 	
 	$seatsnew = explode("@", $seats);
 	
