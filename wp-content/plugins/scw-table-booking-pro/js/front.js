@@ -218,7 +218,7 @@
 						jQuery(".single_add_to_cart_button").prop("disabled", true);
 				}
 				
-				if(posttype == "tribe_events"){
+				if(posttype == "events"){
 					jQuery(".scwatbwsr_total_value").text(data);
 				}
 			}
@@ -242,9 +242,13 @@
 	resetButton.addEventListener('click', panzoom.reset)
 
 	jQuery(".tbf-selected-table > input").prop('readOnly', true);
+	jQuery(".tbf-date > input").prop('readOnly', true);
+
+	const date = jQuery(".scwatbwsr_schedule_item").attr("data-date");
+	jQuery(".tbf-date > input").val(date);
 
 	// wordpress post
-	// if(posttype == "tribe_events"){
+	// if(posttype == "events"){
 	// 	console.log(jQuery(".tbf").find(".wpforms-submit"));
 	// 	jQuery(".tbf").find(".wpforms-submit").click(function(){
 	// 		//var name = jQuery(".scwatbwsr_form_name_input").val();

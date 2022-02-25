@@ -1292,16 +1292,16 @@ add_action( 'woocommerce_cart_item_removed', 'scwatbwsr_cart_updated', 10, 2 );
 add_action( 'add_meta_boxes', 'scwatbwsr_add_tab_admin_post', 10, 2 );
 function scwatbwsr_add_tab_admin_post($post_type, $post){
 	global $wp_meta_boxes;
-	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'title' ] = "SCW Table Booking";
-	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'args' ] = "";
-	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'id' ] = "scwatbwsr";
-	$wp_meta_boxes[ 'tribe_events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'callback' ] = "scwatbwsr_add_tab_admin_post_display";
+	$wp_meta_boxes[ 'events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'title' ] = "SCW Table Booking";
+	$wp_meta_boxes[ 'events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'args' ] = "";
+	$wp_meta_boxes[ 'events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'id' ] = "scwatbwsr";
+	$wp_meta_boxes[ 'events' ][ 'normal' ][ 'core' ][ 'scwatbwsr' ][ 'callback' ] = "scwatbwsr_add_tab_admin_post_display";
 }
 function scwatbwsr_add_tab_admin_post_display(){
 	global $wpdb;
 	$postId = $_GET['post'];
 	
-	if($postId && get_post_type($postId) == "tribe_events"){
+	if($postId && get_post_type($postId) == "events"){
 		wp_register_script('scwatbwsr-productscript', SCWATBWSR_URL .'js/product.js');
 		wp_enqueue_script('scwatbwsr-productscript');
 		wp_register_style('scwatbwsr-productcss', SCWATBWSR_URL .'css/product.css');
@@ -1364,7 +1364,7 @@ function scwatbwsr_content($content){
 	$getRoomSql = $wpdb->prepare("SELECT * from {$tableProducts} where proid=%d", $proId);
 	$room = $wpdb->get_results($getRoomSql);
 	
-	if(get_post_type($proId)=="tribe_events" && $room && !is_admin()){
+	if(get_post_type($proId)=="events" && $room && !is_admin()){
 		ob_start();
 		
 		$roomid = $room[0]->roomid;
@@ -1399,7 +1399,7 @@ function scwatbwsr_content($content){
 			$seatbookedcolor = $roomData[0]->seatbookedcolor;
 		else
 			$seatbookedcolor = "#000";
-		
+
 		$getTablesSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d", $roomid);
 		$tables = $wpdb->get_results($getTablesSql);
 		
@@ -1464,18 +1464,11 @@ function scwatbwsr_content($content){
 			</div>
 
             <?php
-
-            $tribe_event = tribe_events_get_event();
-            if ($tribe_event) {
-                $start_time = tribe_get_start_time($tribe_event->ID);
-                $start_date = tribe_get_start_date($tribe_event->ID, false, "d.F Y");
-            }
+            $event_date = get_field("event_date");
             ?>
 
-            <div class="scwatbwsr_schedule_item" style="display: none;"> <?php echo $start_date. " - " . $start_time ?> </div>
+            <div class="scwatbwsr_schedule_item" style="display: none;" data-date="<?php echo $event_date ?>"> <?php echo $event_date ?> </div>
 
-            <script>
-            </script>
 
 <!--			<div class="scwatbwsr_schedules --><?php //if($checkSchedules){ ?><!--scwatbwsr_schedules_special--><?php //}else{ ?><!--scwatbwsr_schedules_daily--><?php //} ?><!--">-->
 <!--				--><?php
@@ -1683,38 +1676,125 @@ function scwatbwsr_content($content){
 
 // CUSTOM
 
+function getValueById(int $id, array $array) {
+    $value = "";
+    foreach($array as $index=>$json) {
+        if($json['id'] == $id) {
+            $value = $json['value'];
+        }
+    }
+    return $value;
+}
+
 /**
- * This will fire at the very end of a (successful) form entry.
+ * Fires after all field validation and formatting data.
  *
- * @link  https://wpforms.com/developers/wpforms_process_complete/
+ * @link  https://wpforms.com/developers/wpforms_process_filter/
  *
- * @param array  $fields    Sanitized entry field values/properties.
- * @param array  $entry     Original $_POST global.
- * @param array  $form_data Form data and settings.
- * @param int    $entry_id  Entry ID. Will return 0 if entry storage is disabled or using WPForms Lite.
+ * @param  array  $fields     Sanitized entry field values/properties.
+ * @param  array  $entry      Original $_POST global.
+ * @param  array  $form_data  Form data and settings.
+ *
+ * @return array
  */
 
-function wpf_dev_process_complete( $fields, $entry, $form_data, $entry_id ) {
-    function getValueById(int $id, array $array) {
-        $value = "";
-        foreach($array AS $index=>$json) {
-            if($json['id'] == $id) {
-                $value = $json['value'];
-            }
+function wpf_dev_process_filter( $fields, $entry, $form_data ) {
+
+    $name = getValueById(2, $fields);
+    $table  = getValueById(6, $fields);
+    $date = getValueById(7, $fields);
+
+    $data = $name . $date . $table;
+    $order_id = hash("crc32", $data);
+
+    foreach($fields as $index=>$json) {
+        if($json['id'] == 9) {
+            error_log($index);
+            $fields[$index]['value'] = $order_id;
         }
-        return $value;
     }
+
+    return $fields;
+
+}
+
+add_filter( 'wpforms_process_filter', 'wpf_dev_process_filter', 10, 3 );
+
+
+
+/**
+ * Action that fires during form entry processing after initial field validation.
+ *
+ * @link   https://wpforms.com/developers/wpforms_process/
+ *
+ * @param  array  $fields    Sanitized entry field. values/properties.
+ * @param  array  $entry     Original $_POST global.
+ * @param  array  $form_data Form data and settings.
+ *
+ */
+
+function wpf_dev_process( $fields, $entry, $form_data ) {
+
 
     $name = getValueById(2, $fields);
     $email = getValueById(3, $fields);
     $table  = getValueById(6, $fields);
+    $date = getValueById(7, $fields);
+    $order_id =  getValueById(9, $fields);
+
 
     global $wpdb;
     $table_name = $wpdb->prefix . 'scwatbwsr_orders';
     $wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
 	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-        $entry['post_id'], "", $table, " ", $name, " ", $email, " ", " ", " "));
+        $entry['post_id'], $order_id, $table, $date, $name, " ", $email, " ", " ", " "));
+
+    //wpforms()->process->errors[ $form_data['id'] ] [ '4' ] = "Some Error occured";
 }
 
-add_action( 'wpforms_process_complete', 'wpf_dev_process_complete', 10, 4 );
+add_action( 'wpforms_process', 'wpf_dev_process', 10, 4 );
+
+
+/**
+ * Filters dashes from labels on plain text email.
+ *
+ * @link   https://wpforms.com/developers/wpforms_email_message/
+ *
+ * @param  string $message  Email message including Smart Tags.
+ * @param  object $emails   Instance of the WPForms_WP_Emails class
+ *
+ * @return string
+ */
+
+function wpf_dev_email_message( $message, $emails ) {
+
+    //error_log($message);
+    // Remove dashes from labels
+    $email = str_replace( array( '--- ', ' ---' ), '', $message );
+    return $email;
+}
+add_filter( 'wpforms_email_message', 'wpf_dev_email_message', 10, 2 );
+
+
+/**
+ * Filter applies to entry fields before a form notification email is sent.
+ *
+ * @link  https://wpforms.com/developers/wpforms_entry_email_data/
+ *
+ * @param  array  $fields     Sanitized entry field values/properties.
+ * @param  array  $entry      Original $_POST global.
+ * @param  array  $form_data  Form data and settings.
+ *
+ * @return array
+ */
+
+function wpf_dev_entry_email_data( $fields, $entry, $form_data ) {
+
+    error_log("MAIl");
+    error_log(json_encode($fields));
+
+    return $fields;
+
+}
+add_filter( 'wpforms_entry_email_data' , 'wpf_dev_entry_email_data', 10, 3  );
 
