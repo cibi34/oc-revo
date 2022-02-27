@@ -9,6 +9,16 @@
  * License: GPLv2 or later
 */
 
+// WP FORMS VARIABLES
+$wpf_id_name = 2;
+$wpf_id_mail = 3;
+$wpf_id_date = 10;
+$wpf_id_table = 6;
+$wpf_id_booking_id = 17;
+$wpf_id_order_id = 11;
+$wpf_id_cancel_button = 16;
+
+
 define ( 'SCWATBWSR_URL', plugin_dir_url(__FILE__));
 
 function scwatbwsr_boot_session(){
@@ -1700,19 +1710,29 @@ function getValueById(int $id, array $array) {
 
 function wpf_dev_process_filter( $fields, $entry, $form_data ) {
 
-    $name = getValueById(2, $fields);
-    $table  = getValueById(6, $fields);
-    $date = getValueById(7, $fields);
+    // #octo id's von Table Booking Form
+    // Erstellt hash (orderid) und fügt sie in die Form
+    global $wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button;
+    $name = getValueById($wpf_id_name, $fields);
+    $table  = getValueById($wpf_id_table, $fields);
+    $date = getValueById($wpf_id_date, $fields);
 
     $data = $name . $date . $table;
-    $order_id = hash("crc32", $data);
+    $order_id = hash("sha256", $data);
+
+    $url = get_home_url() . '/cancelbooking.php?orderid=' . $order_id;
+    $button = "<a href='$url'>Buchung stornieren</a>";
 
     foreach($fields as $index=>$json) {
-        if($json['id'] == 9) {
-            error_log($index);
+        if($json['id'] == $wpf_id_order_id) {
             $fields[$index]['value'] = $order_id;
         }
+        if($json['id'] == $wpf_id_cancel_button) {
+            $fields[$index]['value'] = $button;
+        }
     }
+
+    error_log(json_encode($fields));
 
     return $fields;
 
@@ -1735,12 +1755,14 @@ add_filter( 'wpforms_process_filter', 'wpf_dev_process_filter', 10, 3 );
 
 function wpf_dev_process( $fields, $entry, $form_data ) {
 
-
-    $name = getValueById(2, $fields);
-    $email = getValueById(3, $fields);
-    $table  = getValueById(6, $fields);
-    $date = getValueById(7, $fields);
-    $order_id =  getValueById(9, $fields);
+    // #octo id's von Table Booking Form
+    // schreibt Werte aus Form in Datenbank
+    global $wpf_id_date, $wpf_id_order_id, $wpf_id_mail, $wpf_id_name, $wpf_id_table;
+    $name = getValueById($wpf_id_name, $fields);
+    $table  = getValueById($wpf_id_table, $fields);
+    $date = getValueById($wpf_id_date, $fields);
+    $email = getValueById($wpf_id_mail, $fields);
+    $order_id =  getValueById($wpf_id_order_id, $fields);
 
 
     global $wpdb;
@@ -1753,28 +1775,6 @@ function wpf_dev_process( $fields, $entry, $form_data ) {
 }
 
 add_action( 'wpforms_process', 'wpf_dev_process', 10, 4 );
-
-
-/**
- * Filters dashes from labels on plain text email.
- *
- * @link   https://wpforms.com/developers/wpforms_email_message/
- *
- * @param  string $message  Email message including Smart Tags.
- * @param  object $emails   Instance of the WPForms_WP_Emails class
- *
- * @return string
- */
-
-function wpf_dev_email_message( $message, $emails ) {
-
-    //error_log($message);
-    // Remove dashes from labels
-    $email = str_replace( array( '--- ', ' ---' ), '', $message );
-    return $email;
-}
-add_filter( 'wpforms_email_message', 'wpf_dev_email_message', 10, 2 );
-
 
 /**
  * Filter applies to entry fields before a form notification email is sent.
@@ -1790,11 +1790,23 @@ add_filter( 'wpforms_email_message', 'wpf_dev_email_message', 10, 2 );
 
 function wpf_dev_entry_email_data( $fields, $entry, $form_data ) {
 
-    error_log("MAIl");
-    error_log(json_encode($fields));
+    global $wpdb, $wpf_id_order_id, $wpf_id_booking_id;
+
+    $order_id = getValueById($wpf_id_order_id, $fields);
+
+    $table_name = $wpdb->prefix . 'scwatbwsr_orders';
+    $query = $wpdb->prepare("SELECT id from {$table_name} where orderId=%s", $order_id);
+    $id_array = $wpdb->get_results($query);
+    $id = $id_array[0]->id;
+
+    foreach($fields as $index=>$json) {
+        if($json['id'] == $wpf_id_booking_id) {
+            $fields[$index]['value'] = $id;
+        }
+    }
+
 
     return $fields;
 
 }
 add_filter( 'wpforms_entry_email_data' , 'wpf_dev_entry_email_data', 10, 3  );
-
