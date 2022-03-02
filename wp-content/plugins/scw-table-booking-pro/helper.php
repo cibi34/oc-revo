@@ -523,7 +523,7 @@ if($task == "add_room"){
 	$roomId = filter_var($_POST["roomId"], FILTER_VALIDATE_INT);
 	$seat = filter_var($_POST["seat"], FILTER_SANITIZE_STRING);
 	$proid = filter_var($_POST["proid"], FILTER_VALIDATE_INT);
-
+	
 	$cseat = explode(".", $seat);
 	
 	$bookedTb = $wpdb->prefix . 'scwatbwsr_bookedseats';
@@ -561,7 +561,7 @@ if($task == "add_room"){
 	$body .= 'Note: '.$note.'<br>';
 	$body .= 'Total: '.$total.'<br>';
 	$headers = array('Content-Type: text/html; charset=UTF-8');
-
+	 
     echo 1;
 	//echo wp_mail( array($email, $adminEmail), $subject, $body, $headers );
 	
