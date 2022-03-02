@@ -2,6 +2,17 @@
 var upload_image_button=false;
 (function(jQuery) {
 "use strict";
+
+	//CUSTOM
+	jQuery('#scwatbwsr_event_datetimepicker').datetimepicker({
+		inline:true,
+		closeOnDateSelect: false,
+	});
+
+
+	///////
+
+
 	jQuery('.scwatbwsr_media_upload').on("click", function(){
         upload_image_button =true;
         var formfieldID = jQuery(this).prev('input');

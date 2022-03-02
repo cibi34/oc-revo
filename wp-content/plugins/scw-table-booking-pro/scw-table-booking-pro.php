@@ -11,13 +11,14 @@
  */
 
 // WP FORMS VARIABLES
-$wpf_id_name = 1;
-$wpf_id_mail = 2;
-$wpf_id_date = 4;
-$wpf_id_table =3;
-$wpf_id_booking_id = 5;
-$wpf_id_order_id = 6;
-$wpf_id_cancel_button = 7;
+$wpf_id_name = 2;
+$wpf_id_mail = 3;
+$wpf_id_date = 10;
+$wpf_id_table = 6;
+$wpf_id_booking_id = 17;
+$wpf_id_order_id = 11;
+$wpf_id_cancel_button = 16;
+
 
 define('SCWATBWSR_URL', plugin_dir_url(__FILE__));
 
@@ -702,6 +703,7 @@ function scwatbwsr_parameters()
 
 
 									<section id="scwatbwsr_content7<?php echo esc_attr($room->id) ?>" class="tab-content">
+                                        <input type="text" id="scwatbwsr_event_datetimepicker" />
 										<?php
 										foreach ($pro as $event) {
 											$getOrdersSql = $wpdb->prepare("SELECT * from {$ordersTb} where productId=%d", $event->proid);
