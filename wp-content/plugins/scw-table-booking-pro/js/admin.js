@@ -4,10 +4,52 @@ var upload_image_button=false;
 "use strict";
 
 	//CUSTOM
-	jQuery('#scwatbwsr_event_datetimepicker').datetimepicker({
-		inline:true,
-		closeOnDateSelect: false,
-	});
+	const event_select = document.querySelector('#event-select');
+	if(event_select) {
+		const roomID = event_select.dataset.room;
+		event_select.addEventListener('change', (e)=>{
+			const eventID = event_select.value;
+			checkDate(eventID,roomID);
+		});
+	}
+
+	// jQuery('#scwatbwsr_event_datetimepicker').datetimepicker({
+	// 	inline:true,
+	// 	closeOnDateSelect: false,
+	// 	timepicker: false,
+	// 	format:'d.m.Y',
+	// 	formatDate:'d.m.Y',
+	// 	onSelectDate:function(ct,$i){
+	// 		checkDate($i[0].value, roomID)
+	// 	}
+	//
+	// });
+
+
+	function checkDate(eventID,roomID) {
+		jQuery.ajax({
+			type: "POST",
+			url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
+			data:{
+				task: "check_event_bookings",
+				eventID: eventID,
+				roomID: roomID,
+			},
+			beforeSend: function(data){
+				document.body.style.cursor='wait';
+			},
+			success : function(data){
+				const container = document.querySelector(".scwatbwsr_content_container");
+				container.innerHTML = "";
+				container.innerHTML = data;
+				document.body.style.cursor='default';
+			},
+			error: function(data){
+				alert("An error occured.");
+			},
+			dataType: 'json'
+		});
+	}
 
 
 	///////
