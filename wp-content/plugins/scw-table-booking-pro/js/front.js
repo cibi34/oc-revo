@@ -24,51 +24,6 @@
 	if(compulsory == "yes")
 		jQuery(".single_add_to_cart_button").prop("disabled", true);
 	
-	// if(jQuery(".scwatbwsr_schedules_daily").size() > 0){
-	// 	var array_dates = jQuery(".array_dates").val();
-	//
-	// 	if(jQuery(".array_times").val()){
-	// 		var array_times = jQuery(".array_times").val().split(",");
-	//
-	// 		jQuery('#scwatbwsr_schedules_picker').datetimepicker({
-	// 			disabledWeekDays: array_dates,
-	// 			allowTimes: array_times,
-	// 			format: date_format+' H:i',
-	// 			defaultTime: array_times[0],
-	// 			closeOnDateSelect: false,
-	// 			onSelectTime:function(ct, $i){
-	// 				checkSchedule($i[0].value);
-	// 			},
-	// 			onSelectDate:function(ct,$i){
-	// 				checkSchedule($i[0].value);
-	// 			}
-	// 		});
-	// 	}else{
-	// 		jQuery('#scwatbwsr_schedules_picker').datetimepicker({
-	// 			disabledWeekDays: array_dates,
-	// 			step: 5,
-	// 			format: date_format+' H:i',
-	// 			defaultTime: "00:00",
-	// 			closeOnDateSelect: false,
-	// 			onSelectTime:function(ct, $i){
-	// 				checkSchedule($i[0].value);
-	// 			},
-	// 			onSelectDate:function(ct,$i){
-	// 				checkSchedule($i[0].value);
-	// 			}
-	// 		});
-	// 	}
-	// }else{
-	// 	jQuery(".scwatbwsr_schedules_item").each(function(){
-	// 		var thische = jQuery(this);
-	// 		thische.on("click", function(){
-	// 			jQuery(".scwatbwsr_schedules_item").removeClass("active");
-	// 			thische.addClass("active");
-	//
-	// 			checkSchedule(thische.text());
-	// 		});
-	// 	});
-	// }
 	function checkSchedule(schedule){
 		jQuery.ajax({
 			type: "POST",
@@ -159,16 +114,14 @@
 					if(jQuery(this).hasClass("active")){
 						jQuery(this).removeClass("active");
 						thistb.find(".scwatbwsr_map_tables_table_seat").removeClass("active");
-					}else{
+					}else{						
 						jQuery(".scwatbwsr_map_tables_table").each(function(){
-							jQuery(this).find(".scwatbwsr_map_tables_table_seat.active").removeClass("active");
-							jQuery(this).find(".scwatbwsr_map_tables_table_label.active").removeClass("active");
-						});
+						jQuery(this).find(".scwatbwsr_map_tables_table_seat.active").removeClass("active");
+						jQuery(this).find(".scwatbwsr_map_tables_table_label.active").removeClass("active");
+					});
 
 						jQuery(this).addClass("active");
 						thistb.find(".scwatbwsr_map_tables_table_seat").addClass("active");
-
-
 						jQuery(".tbf-selected-table>input").val(getSeats());
 					}
 					sessSeat();
@@ -189,13 +142,10 @@
 			});
 		});
 		return seats;
-
 	}
-	
+
 	function sessSeat(){
 		var seats = getSeats();
-
-		
 		jQuery.ajax({
 			type: "POST",
 			url: url+"helper.php",
@@ -237,78 +187,13 @@
 	
 	const parent = element.parentElement
 	parent.addEventListener('wheel', panzoom.zoomWithWheel);
-	zoomInButton.addEventListener('click', panzoom.zoomIn)
-	zoomOutButton.addEventListener('click', panzoom.zoomOut)
-	resetButton.addEventListener('click', panzoom.reset)
-
+	zoomInButton.addEventListener('click', panzoom.zoomIn);
+	zoomOutButton.addEventListener('click', panzoom.zoomOut);
+	resetButton.addEventListener('click', panzoom.reset);
 	jQuery(".tbf-selected-table > input").prop('readOnly', true);
 	jQuery(".tbf-date > input").prop('readOnly', true);
 
 	const date = jQuery(".scwatbwsr_schedule_item").attr("data-date");
 	jQuery(".tbf-date > input").val(date);
 
-	// wordpress post
-	// if(posttype == "events"){
-	// 	console.log(jQuery(".tbf").find(".wpforms-submit"));
-	// 	jQuery(".tbf").find(".wpforms-submit").click(function(){
-	// 		//var name = jQuery(".scwatbwsr_form_name_input").val();
-	// 		var name = jQuery(".tbf").find("tbf-name > input").val();
-	// 		console.log(name);
-	// 		//var address = jQuery(".scwatbwsr_form_address_input").val();
-	// 		var address = "";
-	// 		//var email = jQuery(".scwatbwsr_form_email_input").val();
-	// 		var email = jQuery(".tbf").find("tbf-mail > input").val();
-	// 		console.log(email);
-	// 		//var phone = jQuery(".scwatbwsr_form_phone_input").val();
-	// 		var phone = "";
-	// 		//var note = jQuery(".scwatbwsr_form_note_input").val();
-	// 		var note = "";
-	// 		//var total = jQuery(".scwatbwsr_total_value").text().trim();
-	// 		var total = "";
-	//
-	// 		var seats = "";
-	// 		jQuery(".scwatbwsr_map_tables_table").each(function(){
-	// 			var tbname = jQuery(this).children(".scwatbwsr_map_tables_table_label").text().trim();
-	// 			jQuery(this).find(".scwatbwsr_map_tables_table_seat.active").each(function(){
-	// 				if(seats)
-	// 					seats += "@"+tbname+"."+jQuery(this).text().trim();
-	// 				else
-	// 					seats += tbname+"."+jQuery(this).text().trim();
-	// 			});
-	// 		});
-	//
-	// 		//var schedule = jQuery(".scwatbwsr_schedules_item.active").text().trim();
-	// 		//if(!schedule) schedule = jQuery("#scwatbwsr_schedules_picker").val();
-	// 		var schedule = jQuery(".scwatbwsr_schedule_item").text().trim();
-	//
-	// 		if(seats){
-	// 			jQuery.ajax({
-	// 				url: url+"helper.php",
-	// 				data: {
-	// 					name: name,
-	// 					address: address,
-	// 					email: email,
-	// 					phone: phone,
-	// 					note: note,
-	// 					proId: proid,
-	// 					total: total,
-	// 					seats: seats,
-	// 					schedule: schedule,
-	// 					task : "send_mail"
-	// 				},
-	// 				type: 'POST',
-	// 				beforeSend: function(data){
-	// 					jQuery(".scwatbwsr_sendform").css("opacity", "0.5");
-	// 				},
-	// 				success: function(data){
-	// 					jQuery(".scwatbwsr_sendform").css("opacity", "1");
-	// 					if(data == "1")
-	// 						alert("We got the order, will contact you soon!");
-	// 					else
-	// 						alert("Error!");
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	//}
 })(jQuery);
