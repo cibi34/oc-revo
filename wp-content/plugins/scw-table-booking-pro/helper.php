@@ -20,19 +20,16 @@ if ($task == "add_room") {
     }
 } elseif ($task == "save_base_setting") {
     $roomId = filter_var($_POST["roomId"], FILTER_VALIDATE_INT);
-    $bktime = filter_var($_POST["bktime"], FILTER_VALIDATE_INT);
     $width = filter_var($_POST["width"], FILTER_SANITIZE_STRING);
     $height = filter_var($_POST["height"], FILTER_SANITIZE_STRING);
     $newRoomname = filter_var($_POST["newRoomname"], FILTER_SANITIZE_STRING);
     $color = filter_var($_POST["color"], FILTER_SANITIZE_STRING);
     $bg = filter_var($_POST["bg"], FILTER_SANITIZE_STRING);
     $tbbookedcolor = filter_var($_POST["tbbookedcolor"], FILTER_SANITIZE_STRING);
-    $seatbookedcolor = filter_var($_POST["seatbookedcolor"], FILTER_SANITIZE_STRING);
-    $compulsory = filter_var($_POST["compulsory"], FILTER_SANITIZE_STRING);
 
     $roomsTb = $wpdb->prefix . 'scwatbwsr_rooms';
-    $wpdb->query($wpdb->prepare("UPDATE $roomsTb SET roomname=%s, roomcolor=%s, roombg=%s, width=%s, height=%s, tbbookedcolor=%s, seatbookedcolor=%s, bookingtime=%d, compulsory=%s WHERE id=%d",
-        $newRoomname, $color, $bg, $width, $height, $tbbookedcolor, $seatbookedcolor, $bktime, $compulsory, $roomId));
+    $wpdb->query($wpdb->prepare("UPDATE $roomsTb SET roomname=%s, roomcolor=%s, roombg=%s, width=%s, height=%s, tbbookedcolor=%s WHERE id=%d",
+        $newRoomname, $color, $bg, $width, $height, $tbbookedcolor, $roomId));
 } elseif ($task == "add_type") {
     $roomId = filter_var($_POST["roomId"], FILTER_VALIDATE_INT);
     $typename = filter_var($_POST["typename"], FILTER_SANITIZE_STRING);
@@ -41,9 +38,6 @@ if ($task == "add_room") {
     $tbrecwidth = filter_var($_POST["tbrecwidth"], FILTER_SANITIZE_STRING);
     $tbrecheight = filter_var($_POST["tbrecheight"], FILTER_SANITIZE_STRING);
     $tbcirwidth = filter_var($_POST["tbcirwidth"], FILTER_SANITIZE_STRING);
-    $seatbg = filter_var($_POST["seatbg"], FILTER_SANITIZE_STRING);
-    $seatshape = filter_var($_POST["seatshape"], FILTER_SANITIZE_STRING);
-    $seatwidth = filter_var($_POST["seatwidth"], FILTER_SANITIZE_STRING);
 
     $typesTb = $wpdb->prefix . 'scwatbwsr_types';
     $getdtSql = $wpdb->prepare("SELECT * from {$typesTb} where roomid = %s and name=%s", $roomId, $typename);
@@ -52,11 +46,8 @@ if ($task == "add_room") {
     if ($rs) {
         echo "This type already exists!";
     } else {
-        $wpdb->query($wpdb->prepare("INSERT INTO $typesTb (roomid, name, tbbg, tbshape, tbrecwidth, tbrecheight, tbcirwidth,
-		seatbg, seatshape, seatwidth)
-		VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            $roomId, $typename, $tbbg, $tbshape, $tbrecwidth, $tbrecheight, $tbcirwidth,
-            $seatbg, $seatshape, $seatwidth));
+        $wpdb->query($wpdb->prepare("INSERT INTO $typesTb (roomid, name, tbbg, tbshape, tbrecwidth, tbrecheight, tbcirwidth)
+		VALUES (%d, %s, %s, %s, %s, %s, %s)", $roomId, $typename, $tbbg, $tbshape, $tbrecwidth, $tbrecheight, $tbcirwidth));
     }
 } elseif ($task == "save_type") {
     $thistypeid = filter_var($_POST["thistypeid"], FILTER_VALIDATE_INT);
@@ -64,13 +55,12 @@ if ($task == "add_room") {
     $thistbrecwidth = filter_var($_POST["thistbrecwidth"], FILTER_SANITIZE_STRING);
     $thistbrecheight = filter_var($_POST["thistbrecheight"], FILTER_SANITIZE_STRING);
     $thistbcirwidth = filter_var($_POST["thistbcirwidth"], FILTER_SANITIZE_STRING);
-    $thisseatcolor = filter_var($_POST["thisseatcolor"], FILTER_SANITIZE_STRING);
-    $seatwidth = filter_var($_POST["seatwidth"], FILTER_SANITIZE_STRING);
+    //$thisseatcolor = filter_var($_POST["thisseatcolor"], FILTER_SANITIZE_STRING);
+    //$seatwidth = filter_var($_POST["seatwidth"], FILTER_SANITIZE_STRING);
 
     $typesTb = $wpdb->prefix . 'scwatbwsr_types';
-    $wpdb->query($wpdb->prepare("UPDATE $typesTb SET tbbg=%s, tbrecwidth=%s, tbrecheight=%s, tbcirwidth=%s, 
-	seatbg=%s, seatwidth=%s WHERE id=%d",
-        $thistbcolor, $thistbrecwidth, $thistbrecheight, $thistbcirwidth, $thisseatcolor, $seatwidth, $thistypeid));
+    $wpdb->query($wpdb->prepare("UPDATE $typesTb SET tbbg=%s, tbrecwidth=%s, tbrecheight=%s, tbcirwidth=%s WHERE id=%d",
+        $thistbcolor, $thistbrecwidth, $thistbrecheight, $thistbcirwidth, $thistypeid));
 } elseif ($task == "delete_type") {
     $thistypeid = filter_var($_POST["thistypeid"], FILTER_VALIDATE_INT);
 
@@ -169,7 +159,7 @@ if ($task == "add_room") {
 } elseif ($task == "add_table") {
     $roomId = filter_var($_POST["roomId"], FILTER_VALIDATE_INT);
     $label = filter_var($_POST["label"], FILTER_SANITIZE_STRING);
-    $seats = filter_var($_POST["seats"], FILTER_SANITIZE_STRING);
+    //$seats = filter_var($_POST["seats"], FILTER_SANITIZE_STRING);
     $type = filter_var($_POST["type"], FILTER_SANITIZE_STRING);
 
     $tablesTb = $wpdb->prefix . 'scwatbwsr_tables';
@@ -179,9 +169,9 @@ if ($task == "add_room") {
     if ($rs) {
         echo "This table already exists!";
     } else {
-        $wpdb->query($wpdb->prepare("INSERT INTO $tablesTb (roomid, label, seats, type)
-		VALUES (%d, %s, %s, %d)",
-            $roomId, $label, $seats, $type));
+        $wpdb->query($wpdb->prepare("INSERT INTO $tablesTb (roomid, label, type)
+		VALUES (%d, %s, %d)",
+            $roomId, $label, $type));
     }
 } elseif ($task == "save_table") {
     $thistbid = filter_var($_POST["thistbid"], FILTER_VALIDATE_INT);
@@ -199,8 +189,8 @@ if ($task == "add_room") {
 } elseif ($task == "save_mapping") {
     $tbstring = filter_var($_POST["tbstring"], FILTER_SANITIZE_STRING);
     $tbstring = explode("@", $tbstring);
-    $seatstring = filter_var($_POST["seatstring"], FILTER_SANITIZE_STRING);
-    $seatstring = explode("@", $seatstring);
+    //$seatstring = filter_var($_POST["seatstring"], FILTER_SANITIZE_STRING);
+    //$seatstring = explode("@", $seatstring);
 
     $tableName = $wpdb->prefix . 'scwatbwsr_tables';
     $tableSeat = $wpdb->prefix . 'scwatbwsr_seats';
@@ -212,28 +202,28 @@ if ($task == "add_room") {
             $tbdt[1], $tbdt[2], $tbdt[0]));
     }
 
-    foreach ($seatstring as $st) {
-        $checkdt = explode("#", $st);
-
-        $tbid = $checkdt[0];
-        $seatdts = explode("&", $checkdt[1]);
-
-        foreach ($seatdts as $seatdt) {
-            $sdt = explode("$", $seatdt);
-
-            $getdtSql = $wpdb->prepare("SELECT * from {$tableSeat} where tbid = %d and seat=%s", $tbid, $sdt[0]);
-            $rs = $wpdb->get_results($getdtSql);
-
-            if ($rs) {
-                $wpdb->query($wpdb->prepare("UPDATE $tableSeat SET tleft=%s, ttop=%s WHERE tbid=%d and seat=%s",
-                    $sdt[1], $sdt[2], $tbid, $sdt[0]));
-            } else {
-                $wpdb->query($wpdb->prepare("INSERT INTO $tableSeat (tbid, seat, tleft, ttop)
-				VALUES (%d, %s, %s, %s)",
-                    $tbid, $sdt[0], $sdt[1], $sdt[2]));
-            }
-        }
-    }
+//    foreach ($seatstring as $st) {
+//        $checkdt = explode("#", $st);
+//
+//        $tbid = $checkdt[0];
+//        $seatdts = explode("&", $checkdt[1]);
+//
+//        foreach ($seatdts as $seatdt) {
+//            $sdt = explode("$", $seatdt);
+//
+//            $getdtSql = $wpdb->prepare("SELECT * from {$tableSeat} where tbid = %d and seat=%s", $tbid, $sdt[0]);
+//            $rs = $wpdb->get_results($getdtSql);
+//
+//            if ($rs) {
+//                $wpdb->query($wpdb->prepare("UPDATE $tableSeat SET tleft=%s, ttop=%s WHERE tbid=%d and seat=%s",
+//                    $sdt[1], $sdt[2], $tbid, $sdt[0]));
+//            } else {
+//                $wpdb->query($wpdb->prepare("INSERT INTO $tableSeat (tbid, seat, tleft, ttop)
+//				VALUES (%d, %s, %s, %s)",
+//                    $tbid, $sdt[0], $sdt[1], $sdt[2]));
+//            }
+//        }
+//    }
 } elseif ($task == "save_product_profile") {
     $proid = filter_var($_POST["proid"], FILTER_VALIDATE_INT);
     $vl = filter_var($_POST["vl"], FILTER_VALIDATE_INT);
@@ -457,12 +447,12 @@ if ($task == "add_room") {
     echo json_encode($bookedSeats, 1);
 } elseif ($task == "sess_seats") {
     $proid = filter_var($_POST["proid"], FILTER_VALIDATE_INT);
-    $seats = filter_var($_POST["seats"], FILTER_SANITIZE_STRING);
+    $seat = filter_var($_POST["seat"], FILTER_SANITIZE_STRING);
     $posttype = filter_var($_POST["posttype"], FILTER_SANITIZE_STRING);
 
-    $_SESSION["seats" . $proid] = $seats;
+    $_SESSION["seat" . $proid] = $seat;
 
-    if ($posttype == "post") {
+    if ($posttype == "events") {
         $proTb = $wpdb->prefix . 'scwatbwsr_products';
         $tablesTb = $wpdb->prefix . 'scwatbwsr_tables';
         $pricesTb = $wpdb->prefix . 'scwatbwsr_prices';
@@ -473,35 +463,31 @@ if ($task == "add_room") {
 
         $total = 0;
 
-        if (isset($_SESSION["seats" . $proid])) {
-            $seats = explode("@", $_SESSION["seats" . $proid]);
+        if (isset($_SESSION["seat" . $proid])) {
+            $seat = $_SESSION["seat" . $proid];
             $pertbArr = array();
             $onetimeArr = array();
 
-            foreach ($seats as $seat) {
-                $checkseat = explode(".", $seat);
+            $getTypeSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d and label=%s", $roomid, $seat);
+            $getType = $wpdb->get_results($getTypeSql);
+            $typeid = $getType[0]->type;
 
-                $getTypeSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d and label=%s", $roomid, $checkseat[0]);
-                $getType = $wpdb->get_results($getTypeSql);
-                $typeid = $getType[0]->type;
+            $getPriceSql = $wpdb->prepare("SELECT * from {$pricesTb} where typeid=%d", $typeid);
+            $getPrice = $wpdb->get_results($getPriceSql);
 
-                $getPriceSql = $wpdb->prepare("SELECT * from {$pricesTb} where typeid=%d", $typeid);
-                $getPrice = $wpdb->get_results($getPriceSql);
-
-                if ($getPrice && $getPrice[0]->price) {
-                    if ($getPrice[0]->type == "seat") {
-                        $total += $getPrice[0]->price;
-                    } elseif ($getPrice[0]->type == "table") {
-                        $pertbArr[] = array(
-                            'tb' => $checkseat[0],
-                            'price' => $getPrice[0]->price
-                        );
-                    } else {
-                        $onetimeArr[] = array(
-                            'tb' => $checkseat[0],
-                            'price' => $getPrice[0]->price
-                        );
-                    }
+            if ($getPrice && $getPrice[0]->price) {
+                if ($getPrice[0]->type == "seat") {
+                    $total += $getPrice[0]->price;
+                } elseif ($getPrice[0]->type == "table") {
+                    $pertbArr[] = array(
+                        'tb' => $seat,
+                        'price' => $getPrice[0]->price
+                    );
+                } else {
+                    $onetimeArr[] = array(
+                        'tb' => $seat,
+                        'price' => $getPrice[0]->price
+                    );
                 }
             }
 
@@ -521,21 +507,19 @@ if ($task == "add_room") {
     $wpdb->query($wpdb->prepare("DELETE FROM $ordersTB where id=%d", $oid));
 } elseif ($task == "make_as_booked") {
     $roomId = filter_var($_POST["roomId"], FILTER_VALIDATE_INT);
-    $seat = filter_var($_POST["seat"], FILTER_SANITIZE_STRING);
+    $table = filter_var($_POST["table"], FILTER_SANITIZE_STRING);
     $proid = filter_var($_POST["proid"], FILTER_VALIDATE_INT);
 
-    $cseat = explode(".", $seat);
-
     $bookedTb = $wpdb->prefix . 'scwatbwsr_bookedseats';
-    $getdtSql = $wpdb->prepare("SELECT * from {$bookedTb} where roomid=%d and tb=%s and seat=%s and proid=%d", $roomId, $cseat[0], $cseat[1], $proid);
+    $getdtSql = $wpdb->prepare("SELECT * from {$bookedTb} where roomid=%d and tb=%s and proid=%d", $roomId, $table, $proid);
     $rs = $wpdb->get_results($getdtSql);
 
     if ($rs) {
-        $wpdb->query($wpdb->prepare("DELETE FROM $bookedTb where roomid=%d and tb=%s and seat=%s and proid=%d", $roomId, $cseat[0], $cseat[1], $proid));
+        $wpdb->query($wpdb->prepare("DELETE FROM $bookedTb where roomid=%d and tb=%s and proid=%d", $roomId, $table, $proid));
     } else {
-        $wpdb->query($wpdb->prepare("INSERT INTO $bookedTb (roomid, tb, seat, proid)
-		VALUES (%d, %s, %s, %d)",
-            $roomId, $cseat[0], $cseat[1], $proid));
+        $wpdb->query($wpdb->prepare("INSERT INTO $bookedTb (roomid, tb, proid)
+		VALUES (%d, %s, %d)",
+            $roomId, $table, $proid));
     }
 } elseif ($task == "send_mail") {
     $name = $_POST["name"];
@@ -571,65 +555,4 @@ if ($task == "add_room") {
     $wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
 	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
         $proId, "", implode(",", $seatsnew), $schedule, $name, $address, $email, $phone, $note, $total));
-} elseif ($task == "check_event_bookings") {
-    $proID = filter_var($_POST["eventID"], FILTER_SANITIZE_STRING);
-    $roomID = filter_var($_POST["roomID"], FILTER_SANITIZE_STRING);
-
-    //orders
-    $ordersTb = $wpdb->prefix . 'scwatbwsr_orders';
-    $getOrdersSql = $wpdb->prepare("SELECT * from {$ordersTb} where productId=%s", $proID);
-    $orders = $wpdb->get_results($getOrdersSql);
-
-    //tables
-    $tablesTb = $wpdb->prefix . 'scwatbwsr_tables';
-    $getTablesSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d", $roomID);
-    $tables = $wpdb->get_results($getTablesSql);
-
-    //seats
-    $bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
-
-    //$all_events_content = "";
-    ob_start();
-    ?>
-    <div class="scwatbwsr_event" data-id="<?php echo $proId; ?>">
-        <div class="scwatbwsr_event_id"> <?php echo $proId; ?> </div>
-        <span class="scwatbwsr_orders">
-        <?php
-        foreach ($orders as $order) {
-            include("templates/order-template.php");
-        }
-        ?>
-        </span>
-        <span class="scwatbwsr_bktables">
-            <?php
-            if ($tables) {
-                foreach ($tables as $table) {
-                    $seats = explode(",", $table->seats);
-                    if ($seats) {
-                        foreach ($seats as $seat) {
-                            $getBookedSql = $wpdb->prepare("SELECT * from {$bookedTB} where roomid=%d and tb=%s and seat=%s and proid=%d", $roomID, $table->label, $seat, $proId);
-                            $bookedseat = $wpdb->get_results($getBookedSql);
-                            ?>
-                            <span class="scwatbwsr_bktables_seat">
-                                <span class="scwatbwsr_bktables_seat_name"><?php echo esc_attr($table->label . "." . $seat) ?></span>
-                                <span class="scwatbwsr_bktables_seat_make">
-                                    <label><?php echo esc_html__("Mark as booked", "scwatbwsr-translate") ?></label>
-                                    <input <?php if ($bookedseat) echo "checked" ?> type="checkbox"
-                                                                                    class="scwatbwsr_bktables_seat_make_input">
-                                </span>
-                            </span>
-                            <?php
-                        }
-                    }
-                    ?>
-                    <span style="float: left;width: 100%;font-weight: bold;">--------------------------------</span>
-                    <?php
-                }
-            }
-            ?>
-        </span>
-    </div>
-    <?php
-    $content = ob_get_clean();
-    echo json_encode($content);
 }

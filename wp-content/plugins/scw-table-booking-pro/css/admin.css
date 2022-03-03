@@ -1,3 +1,21 @@
+.scwatbwsr_event {
+    display:none;
+}
+.scwatbwsr_event.active {
+    display:block;
+}
+
+.page-title-action {
+    width: 100%;
+    margin: 15px 0;
+}
+
+.scwatbwsr_event_name {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    margin: 20px 0;
+}
 
 p.submit {
     display: none;
@@ -261,6 +279,21 @@ p.submit {
     width: 100%;
 	margin-top: 20px;
 }
+.scwatbwsr_wpformids {
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+.scwatbwsr_wpformids_label {
+    float: left;
+    width: 100%;
+    font-weight: bold;
+}
+
+.scwatbwsr_wpformids_json{
+    width: 100%;
+}
+
 .scwatbwsr_roomsize_label {
     float: left;
 	width: 100%;
@@ -1087,15 +1120,7 @@ p.submit {
     float: left;
 	font-weight: bold;
 }
-.scwatbwsr_orders_item_id,
-.scwatbwsr_orders_item_seats,
-.scwatbwsr_orders_item_schedule ,
-.scwatbwsr_orders_item_name ,
-.scwatbwsr_orders_item_address ,
-.scwatbwsr_orders_item_email ,
-.scwatbwsr_orders_item_phone ,
-.scwatbwsr_orders_item_note ,
-.scwatbwsr_orders_item_total {
+.scwatbwsr_oitem {
     float: left;
     margin-left: 20px;
 }

@@ -11,20 +11,21 @@
  */
 
 // WP FORMS VARIABLES
-$wpf_id_name = 1;
-$wpf_id_mail = 2;
-$wpf_id_table = 3;
-$wpf_id_date = 4;
-$wpf_id_phone = 11;
-$wpf_id_notes = 12;
-$wpf_id_num_ppl = 13;
-$wpf_id_booking_id = 5;
-$wpf_id_order_id = 6;
-$wpf_id_cancel_button = 7;
-$wpf_id_event_post_id = 14;
-$wpf_id_vodka_amount = 15;
-$wpf_id_sum = 16;
-$wpf_id_birthday = 17;
+$wpf_id_name = 2;
+$wpf_id_mail = 3;
+$wpf_id_table = 6;
+$wpf_id_date = 10;
+$wpf_id_phone = 46;
+$wpf_id_notes = 18;
+$wpf_id_num_ppl = 20;
+$wpf_id_booking_id = 17;
+$wpf_id_order_id = 11;
+$wpf_id_cancel_button = 16;
+$wpf_id_event_post_id = 15;
+$wpf_id_vodka_amount = 38;
+$wpf_id_sum = 29;
+$wpf_id_birthday = 43;
+
 
 define('SCWATBWSR_URL', plugin_dir_url(__FILE__));
 
@@ -48,12 +49,8 @@ function scwatbwsr_install()
 
     $roomsTB = $wpdb->prefix . 'scwatbwsr_rooms';
     $typesTB = $wpdb->prefix . 'scwatbwsr_types';
-    $schedulesTB = $wpdb->prefix . 'scwatbwsr_schedules';
-    $dailyschedulesTB = $wpdb->prefix . 'scwatbwsr_dailyschedules';
-    $dailytimesTB = $wpdb->prefix . 'scwatbwsr_dailytimes';
     $pricesTB = $wpdb->prefix . 'scwatbwsr_prices';
     $tablesTB = $wpdb->prefix . 'scwatbwsr_tables';
-    $seatsTB = $wpdb->prefix . 'scwatbwsr_seats';
     $productsTb = $wpdb->prefix . 'scwatbwsr_products';
     $ordersTB = $wpdb->prefix . 'scwatbwsr_orders';
     $bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
@@ -66,9 +63,6 @@ function scwatbwsr_install()
 		`width` varchar(255) DEFAULT NULL,
 		`height` varchar(255) DEFAULT NULL,
 		`tbbookedcolor` varchar(255) DEFAULT NULL,
-		`seatbookedcolor` varchar(255) DEFAULT NULL,
-		`compulsory` varchar(255) DEFAULT NULL,
-		`bookingtime` int(11) DEFAULT NULL,
 		PRIMARY KEY (`id`)
 	) $charset_collate;";
 
@@ -81,30 +75,6 @@ function scwatbwsr_install()
 		`tbrecwidth` varchar(255) DEFAULT NULL,
 		`tbrecheight` varchar(255) DEFAULT NULL,
 		`tbcirwidth` varchar(255) DEFAULT NULL,
-		`seatbg` varchar(255) DEFAULT NULL,
-		`seatshape` varchar(255) DEFAULT NULL,
-		`seatwidth` varchar(255) DEFAULT NULL,
-		PRIMARY KEY (`id`)
-	) $charset_collate;";
-
-    $schedulesSql = "CREATE TABLE $schedulesTB (
-		`id` int(11) NOT NULL AUTO_INCREMENT,
-		`roomid` int(11) DEFAULT NULL,
-		`schedule` varchar(255) DEFAULT NULL,
-		PRIMARY KEY (`id`)
-	) $charset_collate;";
-
-    $dailyschedulesSql = "CREATE TABLE $dailyschedulesTB (
-		`id` int(11) NOT NULL AUTO_INCREMENT,
-		`roomid` int(11) DEFAULT NULL,
-		`daily` varchar(255) DEFAULT NULL,
-		PRIMARY KEY (`id`)
-	) $charset_collate;";
-
-    $dailytimesSql = "CREATE TABLE $dailytimesTB (
-		`id` int(11) NOT NULL AUTO_INCREMENT,
-		`roomid` int(11) DEFAULT NULL,
-		`time` varchar(255) DEFAULT NULL,
 		PRIMARY KEY (`id`)
 	) $charset_collate;";
 
@@ -120,17 +90,7 @@ function scwatbwsr_install()
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`roomid` int(11) DEFAULT NULL,
 		`label` varchar(255) DEFAULT NULL,
-		`seats` varchar(255) DEFAULT NULL,
 		`type` int(11) DEFAULT NULL,
-		`tleft` varchar(255) DEFAULT NULL,
-		`ttop` varchar(255) DEFAULT NULL,
-		PRIMARY KEY (`id`)
-	) $charset_collate;";
-
-    $seatsSql = "CREATE TABLE $seatsTB (
-		`id` int(11) NOT NULL AUTO_INCREMENT,
-		`tbid` int(11) DEFAULT NULL,
-		`seat` varchar(255) DEFAULT NULL,
 		`tleft` varchar(255) DEFAULT NULL,
 		`ttop` varchar(255) DEFAULT NULL,
 		PRIMARY KEY (`id`)
@@ -163,7 +123,6 @@ function scwatbwsr_install()
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`roomid` int(11) DEFAULT NULL,
 		`tb` varchar(255) DEFAULT NULL,
-		`seat` varchar(255) DEFAULT NULL,
 		`proid` int(11) DEFAULT NULL,
 		PRIMARY KEY (`id`)
 	) $charset_collate;";
@@ -171,12 +130,8 @@ function scwatbwsr_install()
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($roomsSql);
     dbDelta($typesSql);
-    dbDelta($schedulesSql);
-    dbDelta($dailyschedulesSql);
-    dbDelta($dailytimesSql);
     dbDelta($priceSql);
     dbDelta($tablesSql);
-    dbDelta($seatsSql);
     dbDelta($productsSql);
     dbDelta($ordersSql);
     dbDelta($bookedSql);
@@ -387,7 +342,7 @@ function scwatbwsr_content($content)
     global $post;
     $proId = $post->ID;
 
-    $currencyS = "$";
+    $currencyS = "€";
 
     $tableRooms = $wpdb->prefix . 'scwatbwsr_rooms';
     $tableProducts = $wpdb->prefix . 'scwatbwsr_products';
@@ -395,7 +350,6 @@ function scwatbwsr_content($content)
     $tableSchedules = $wpdb->prefix . 'scwatbwsr_schedules';
     $pricesTb = $wpdb->prefix . 'scwatbwsr_prices';
     $tablesTb = $wpdb->prefix . 'scwatbwsr_tables';
-    $seatsTb = $wpdb->prefix . 'scwatbwsr_seats';
     $ordersTb = $wpdb->prefix . 'scwatbwsr_orders';
     $bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
 
@@ -422,7 +376,7 @@ function scwatbwsr_content($content)
 
 
 
-        include("templates/content-template.php");
+        include("templates/frontend-content-template.php");
 
         $string = ob_get_contents();
         ob_end_clean();
@@ -482,8 +436,6 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
         }
     }
 
-    error_log(json_encode($fields));
-
     return $fields;
 }
 
@@ -505,7 +457,7 @@ function wpf_dev_process($fields, $entry, $form_data)
 {
     // #octo id's von Table Booking Form
     // schreibt Werte aus Form in Datenbank
-    global $wpf_id_name, $wpf_id_mail, $wpf_id_table,$wpf_id_date,$wpf_id_phone, $wpf_id_notes, $wpf_id_num_ppl,$wpf_id_booking_id,$wpf_id_order_id, $wpf_id_cancel_button,$wpf_id_event_post_id,$wpf_id_vodka_amount,$wpf_id_sum,$wpf_id_birthday;
+    global $wpf_id_name, $wpf_id_mail, $wpf_id_table,$wpf_id_date,$wpf_id_phone, $wpf_id_notes, $wpf_id_num_ppl,$wpf_id_order_id,$wpf_id_sum,$wpf_id_birthday;
     $name = getValueById($wpf_id_name, $fields);
     $table = getValueById($wpf_id_table, $fields);
     $date = getValueById($wpf_id_date, $fields);
@@ -516,28 +468,38 @@ function wpf_dev_process($fields, $entry, $form_data)
     $total = getValueById($wpf_id_sum, $fields);
     $birthday = getValueById($wpf_id_birthday, $fields);
     $num_ppl = getValueById($wpf_id_num_ppl, $fields);
-    $drinks = getValueById($wpf_id_vodka_amount, $fields);
 
 
     global $wpdb;
-    $table_name = $wpdb->prefix . 'scwatbwsr_orders';
-    $wpdb->query($wpdb->prepare(
-        "INSERT INTO $table_name (`productId`, `seats`, `name`, `email`, `phone`, `note`, `total`,`birthday`,`numberPersons`,`listDrinks`,`orderId`)
-	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-        $entry['post_id'],
-        $table,
-        $name,
-        $email,
-        $phone,
-        $note,
-        $total,
-        $birthday,
-        $num_ppl,
-        $drinks,
-        $order_id
-    ));
 
-    //wpforms()->process->errors[ $form_data['id'] ] [ '4' ] = "Some Error occured";
+    //check whether entry already exists
+    $ordersTB = $wpdb->prefix . 'scwatbwsr_orders';
+    $orders_sql = $wpdb->prepare("SELECT * from {$ordersTB} where productId=%d and seats=%s", $entry['post_id'], $table);
+    $orders = $wpdb->get_results($orders_sql);
+
+    $bookedseatsTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
+    $bookedseats_sql = $wpdb->prepare("SELECT * from {$bookedseatsTB} where proid=%d and tb=%s", $entry['post_id'], $table);
+    $bookedseats = $wpdb->get_results($bookedseats_sql);
+
+    if(count($orders) == 0 && count($bookedseats)==0) {
+        $wpdb->query($wpdb->prepare(
+            "INSERT INTO $ordersTB (`productId`, `seats`, `name`, `email`, `phone`, `note`, `total`,`birthday`,`numberPersons`,`listDrinks`,`orderId`)
+	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            $entry['post_id'],
+            $table,
+            $name,
+            $email,
+            $phone,
+            $note,
+            $total,
+            $birthday,
+            $num_ppl,
+            " ",
+            $order_id
+        ));
+    } else {
+        $wpforms()->process->errors[ $form_data['id'] ] [ '4' ] = "Some Error occured";
+    }
 }
 
 add_action('wpforms_process', 'wpf_dev_process', 10, 4);
@@ -604,6 +566,7 @@ function csv_export()
         die('Security check error');
     }
 
+
     ob_start();
 
     $domain = $_SERVER['SERVER_NAME'];
@@ -611,18 +574,47 @@ function csv_export()
 
     $header_row = array(
         'ProductId',
-        'Name'
+        'Name',
+        'Tisch',
+        'E-Mail',
+        'Telefon',
+        'Geburtstag',
+        'Notiz',
+        'AnzahlPersonen',
+        'ListeDrinks',
+        'Summe',
+        'Hash'
     );
+
     $data_rows = array();
     global $wpdb;
+
     $ordersTB = $wpdb->prefix . 'scwatbwsr_orders';
-    $sql = "SELECT * from {$ordersTB}";
-    $orders = $wpdb->get_results($sql);
+
+    // Event
+    $eventid = isset($_GET['eventid']) ? $_GET['eventid'] : '';
+    if ($eventid == "all") {
+        $sql = "SELECT * from {$ordersTB}";
+        $orders = $wpdb->get_results($sql);
+    } else {
+        $sql = $wpdb->prepare("SELECT * from {$ordersTB} where productId=%s", $eventid);
+        $orders = $wpdb->get_results($sql);
+    }
+
+
     foreach ($orders as $order) {
-        error_log(json_encode($order));
         $row = array(
             $order->productId,
-            $order->name
+            $order->name,
+            $order->seats,
+            $order->email,
+            $order->phone,
+            $order->birthday,
+            $order->note,
+            $order->numberPersons,
+            $order->listDrinks,
+            $order->total,
+            $order->orderId
         );
         $data_rows[] = $row;
     }
@@ -634,9 +626,9 @@ function csv_export()
     header("Content-Disposition: attachment; filename={$filename}");
     header('Expires: 0');
     header('Pragma: public');
-    fputcsv($fh, $header_row);
+    fputcsv($fh, $header_row, ";");
     foreach ($data_rows as $data_row) {
-        fputcsv($fh, $data_row);
+        fputcsv($fh, $data_row, ";");
     }
     fclose($fh);
 
