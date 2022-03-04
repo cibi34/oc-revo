@@ -2,6 +2,25 @@
 var upload_image_button=false;
 (function(jQuery) {
 "use strict";
+
+	//CUSTOM
+	const event_select = document.querySelector('#event-select');
+	if(event_select) {
+		event_select.addEventListener('change', ()=>{
+			const selected_event = event_select.value;
+			const all_events = document.querySelectorAll(".scwatbwsr_event");
+			all_events.forEach(ev => {
+				ev.classList.remove("active");
+				const id = ev.dataset.id;
+				if (id === selected_event) ev.classList.add("active");
+			})
+		});
+	}
+
+
+	///////
+
+
 	jQuery('.scwatbwsr_media_upload').on("click", function(){
         upload_image_button =true;
         var formfieldID = jQuery(this).prev('input');
@@ -89,10 +108,8 @@ var upload_image_button=false;
 			var bg = elthis.find(".scwatbwsr_roombg_con_image").val();
 			var newRoomname = elthis.find(".scwatbwsr_room_content_editname_name").val();
 			var tbbookedcolor = elthis.find(".scwatbwsr_bookedpr_tbcolor").val();
-			var seatbookedcolor = elthis.find(".scwatbwsr_bookedpr_seatcolor").val();
-			var bktime = elthis.find(".scwatbwsr_bktime_ip").val();
-			var compulsory = elthis.find(".scwatbwsr_compulsory_ip").is(":checked")?"yes":"no";
-			
+
+
 			jQuery.ajax({
 				url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
 				data: {
@@ -103,9 +120,6 @@ var upload_image_button=false;
 					bg: bg,
 					newRoomname: newRoomname,
 					tbbookedcolor: tbbookedcolor,
-					seatbookedcolor: seatbookedcolor,
-					bktime: bktime,
-					compulsory: compulsory,
 					task : "save_base_setting"
 				},
 				type: 'POST',
@@ -140,11 +154,11 @@ var upload_image_button=false;
 			var tbrecwidth = elthis.find(".scwatbwsr_roomtype_add_tbshape_rec_width").val();
 			var tbrecheight = elthis.find(".scwatbwsr_roomtype_add_tbshape_rec_height").val();
 			var tbcirwidth = elthis.find(".scwatbwsr_roomtype_add_tbshape_cir_width").val();
-			var seatbg = elthis.find(".scwatbwsr_roomtype_add_seatcolor_input").val();
-			var seatshape = elthis.find("input[name='scwatbwsr_roomtype_add_seatshape']:checked").val();
-			var seatwidth = elthis.find(".scwatbwsr_roomtype_add_seat_size").val();
+			//var seatbg = elthis.find(".scwatbwsr_roomtype_add_seatcolor_input").val();
+			//var seatshape = elthis.find("input[name='scwatbwsr_roomtype_add_seatshape']:checked").val();
+			//var seatwidth = elthis.find(".scwatbwsr_roomtype_add_seat_size").val();
 			
-			if(typename && tbshape && seatshape){
+			if(typename && tbshape){
 				jQuery.ajax({
 					url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
 					data: {
@@ -155,9 +169,6 @@ var upload_image_button=false;
 						tbrecwidth: tbrecwidth,
 						tbrecheight: tbrecheight,
 						tbcirwidth: tbcirwidth,
-						seatbg: seatbg,
-						seatshape: seatshape,
-						seatwidth: seatwidth,
 						task : "add_type"
 					},
 					type: 'POST',
@@ -190,8 +201,8 @@ var upload_image_button=false;
 				var thistbrecwidth = thistype.find(".scwatbwsr_roomtype_item_tbsize_recwidth").val();
 				var thistbrecheight = thistype.find(".scwatbwsr_roomtype_item_tbsize_recheight").val();
 				var thistbcirwidth = thistype.find(".scwatbwsr_roomtype_item_tbsize_cirwidth").val();
-				var thisseatcolor = thistype.find(".scwatbwsr_roomtype_item_seatbg_input").val();
-				var seatwidth = thistype.find(".scwatbwsr_roomtype_item_seatsize_width").val();
+				//var thisseatcolor = thistype.find(".scwatbwsr_roomtype_item_seatbg_input").val();
+				//var seatwidth = thistype.find(".scwatbwsr_roomtype_item_seatsize_width").val();
 				
 				jQuery.ajax({
 					url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
@@ -201,8 +212,6 @@ var upload_image_button=false;
 						thistbrecwidth: thistbrecwidth,
 						thistbrecheight: thistbrecheight,
 						thistbcirwidth: thistbcirwidth,
-						thisseatcolor: thisseatcolor,
-						seatwidth: seatwidth,
 						task : "save_type"
 					},
 					type: 'POST',
@@ -507,16 +516,15 @@ var upload_image_button=false;
 		/////////////
 		elthis.find(".scwatbwsr_tables_add_button").on("click", function(){
 			var label = elthis.find(".scwatbwsr_tables_add_label").val();
-			var seats = elthis.find(".scwatbwsr_tables_add_seats").val();
+			//var seats = elthis.find(".scwatbwsr_tables_add_seats").val();
 			var type = elthis.find(".scwatbwsr_tables_add_type").val();
 			
-			if(label && seats && type){
+			if(label && type){
 				jQuery.ajax({
 					url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
 					data: {
 						roomId : roomId,
 						label: label,
-						seats: seats,
 						type: type,
 						task : "add_table"
 					},
@@ -647,28 +655,27 @@ var upload_image_button=false;
 				else
 					tbstring += tbid+"#"+tbleft+"#"+tbtop;
 				
-				var seatdt = "";
-				thistb.find(".scwatbwsr_mapping_table_seat").each(function(){
-					var seatlb = jQuery(this).text().trim();
-					var sleft = jQuery(this).position().left;
-					var stop = jQuery(this).position().top;
-					
-					if(seatdt)
-						seatdt += "&"+seatlb+"$"+sleft+"$"+stop;
-					else
-						seatdt += seatlb+"$"+sleft+"$"+stop;
-				});
-				if(seatstring)
-					seatstring += "@"+tbid+"#"+seatdt;
-				else
-					seatstring += tbid+"#"+seatdt;
+				// var seatdt = "";
+				// thistb.find(".scwatbwsr_mapping_table_seat").each(function(){
+				// 	var seatlb = jQuery(this).text().trim();
+				// 	var sleft = jQuery(this).position().left;
+				// 	var stop = jQuery(this).position().top;
+				//
+				// 	if(seatdt)
+				// 		seatdt += "&"+seatlb+"$"+sleft+"$"+stop;
+				// 	else
+				// 		seatdt += seatlb+"$"+sleft+"$"+stop;
+				// });
+				// if(seatstring)
+				// 	seatstring += "@"+tbid+"#"+seatdt;
+				// else
+				// 	seatstring += tbid+"#"+seatdt;
 			});
 			
 			jQuery.ajax({
 				url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
 				data: {
 					tbstring: tbstring,
-					seatstring: seatstring,
 					task: "save_mapping"
 				},
 				type: 'POST',
@@ -768,13 +775,13 @@ var upload_image_button=false;
 		elthis.find(".scwatbwsr_bktables_seat").each(function(){
 			var thiss = jQuery(this);
 			var tid = thiss.parent();
-			
+
 			thiss.find(".scwatbwsr_bktables_seat_make_input").on("change", function(){
 				jQuery.ajax({
 					url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
 					data: {
 						roomId : roomId,
-						seat : thiss.children(".scwatbwsr_bktables_seat_name").text().trim(),
+						table : thiss.children(".scwatbwsr_bktables_seat_name").text().trim(),
 						proid: tid.parent().attr("data-id"),
 						task : "make_as_booked"
 					},
