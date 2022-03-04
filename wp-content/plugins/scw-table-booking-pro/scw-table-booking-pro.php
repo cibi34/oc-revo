@@ -11,20 +11,20 @@
  */
 
 // WP FORMS VARIABLES
-$wpf_id_name = 2;
-$wpf_id_mail = 3;
-$wpf_id_table = 6;
-$wpf_id_date = 10;
-$wpf_id_phone = 46;
-$wpf_id_notes = 18;
-$wpf_id_num_ppl = 20;
-$wpf_id_booking_id = 17;
-$wpf_id_order_id = 11;
-$wpf_id_cancel_button = 16;
-$wpf_id_event_post_id = 15;
-$wpf_id_vodka_amount = 38;
-$wpf_id_sum = 29;
-$wpf_id_birthday = 43;
+$wpf_id_name = 1;
+$wpf_id_mail = 2;
+$wpf_id_table = 3;
+$wpf_id_date = 4;
+$wpf_id_phone = 11;
+$wpf_id_notes = 12;
+$wpf_id_num_ppl = 13;
+$wpf_id_booking_id = 5;
+$wpf_id_order_id = 6;
+$wpf_id_cancel_button = 7;
+$wpf_id_event_post_id = 14;
+$wpf_id_vodka_amount = 15;
+$wpf_id_sum = 16;
+$wpf_id_birthday = 17;
 
 
 define('SCWATBWSR_URL', plugin_dir_url(__FILE__));
