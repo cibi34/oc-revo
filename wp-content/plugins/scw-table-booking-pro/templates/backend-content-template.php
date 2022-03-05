@@ -163,6 +163,11 @@ $bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
                                                            placeholder="Width (diameter-px)">
 												</span>
 											</span>
+                                            <span class="scwatbwsr_roomtype_add_maxppl">
+												<span class="scwatbwsr_roomtype_add_maxppl_head"><?php echo esc_html__("Max Persons", "scwatbwsr-translate") ?></span>
+												<input type="number" class="scwatbwsr_roomtype_add_maxppl_input"
+                                                       id="scwatbwsr_roomtype_add_maxppl_input">
+											</span>
 											<span class="scwatbwsr_roomtype_add_button"><i class="fa fa-plus"
                                                                                            aria-hidden="true"></i> <?php echo esc_html__("ADD", "scwatbwsr-translate") ?></span>
 											<span class="scwatbwsr_roomtype_add_reload"><?php echo esc_html__("Refresh Data", "scwatbwsr-translate") ?> <i
@@ -186,6 +191,12 @@ $bookedTB = $wpdb->prefix . 'scwatbwsr_bookedseats';
 															<input type="color"
                                                                    class="scwatbwsr_roomtype_item_tbbg_input"
                                                                    value="<?php echo esc_attr($type->tbbg) ?>">
+														</span>
+                                                        <span class="scwatbwsr_roomtype_item_maxppl">
+															<label><?php echo esc_html__("Max People", "scwatbwsr-translate") ?></label>
+															<input type="number"
+                                                                   class="scwatbwsr_roomtype_item_maxppl_input"
+                                                                   value="<?php echo esc_attr($type->maxppl) ?>">
 														</span>
 														<span class="scwatbwsr_roomtype_item_tbsize <?php echo esc_attr($type->tbshape) ?>">
 															<label><?php echo esc_html__("Table Size", "scwatbwsr-translate") ?></label>

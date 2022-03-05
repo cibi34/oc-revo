@@ -11,20 +11,19 @@
  */
 
 // WP FORMS VARIABLES
-$wpf_id_name = 1;
-$wpf_id_mail = 2;
-$wpf_id_table = 3;
-$wpf_id_date = 4;
-$wpf_id_phone = 11;
-$wpf_id_notes = 12;
-$wpf_id_num_ppl = 13;
-$wpf_id_booking_id = 5;
-$wpf_id_order_id = 6;
-$wpf_id_cancel_button = 7;
-$wpf_id_event_post_id = 14;
-$wpf_id_vodka_amount = 15;
-$wpf_id_sum = 16;
-$wpf_id_birthday = 17;
+$wpf_id_name = 2;
+$wpf_id_mail = 3;
+$wpf_id_table = 57;
+$wpf_id_date = 10;
+$wpf_id_phone = 46;
+$wpf_id_notes = 18;
+$wpf_id_num_ppl = 20;
+$wpf_id_booking_id = 17;
+$wpf_id_order_id = 11;
+$wpf_id_cancel_button = 16;
+$wpf_id_event_post_id = 15;
+$wpf_id_sum = 48;
+$wpf_id_birthday = 43;
 
 
 define('SCWATBWSR_URL', plugin_dir_url(__FILE__));
@@ -75,6 +74,7 @@ function scwatbwsr_install()
 		`tbrecwidth` varchar(255) DEFAULT NULL,
 		`tbrecheight` varchar(255) DEFAULT NULL,
 		`tbcirwidth` varchar(255) DEFAULT NULL,
+		`maxppl` varchar(255) DEFAULT NULL,
 		PRIMARY KEY (`id`)
 	) $charset_collate;";
 
@@ -416,10 +416,12 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
 
     // #octo id's von Table Booking Form
     // Erstellt hash (orderid) und fügt sie in die Form
-    global $wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button;
+    // Fügt den Tischpreis zur Preiskalkulation hinzu
+    global $wpdb,$wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button, $wpf_id_sum;
     $name = getValueById($wpf_id_name, $fields);
     $table = getValueById($wpf_id_table, $fields);
     $date = getValueById($wpf_id_date, $fields);
+    $sum = getValueById($wpf_id_sum, $fields);
 
     $data = $name . $date . $table;
     $order_id = hash("sha256", $data);
@@ -427,19 +429,40 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
     $url = get_home_url() . '/cancelbooking.php?orderid=' . $order_id;
     $button = "<a href='$url'>Buchung stornieren</a>";
 
-    foreach ($fields as $index => $json) {
-        if ($json['id'] == $wpf_id_order_id) {
+    foreach ($fields as $index => $field) {
+        // add hash to fields
+        if (! empty( $field['id'] ) && $field['id'] == $wpf_id_order_id) {
             $fields[$index]['value'] = $order_id;
         }
-        if ($json['id'] == $wpf_id_cancel_button) {
+        // add cancel button to fields
+        if (! empty( $field['id'] ) && $field['id'] == $wpf_id_cancel_button) {
             $fields[$index]['value'] = $button;
         }
+//        // add table price to total price calculation
+//        if ( ! empty( $field['id'] ) && $field['id'] == $wpf_id_sum) {
+//            $tablesTB = $wpdb->prefix . 'scwatbwsr_tables';
+//            $tables_sql = $wpdb->prepare("SELECT type from {$tablesTB} where label=%s", $table);
+//            $typestable = $wpdb->get_results($tables_sql);
+//            $tabletype = intval($typestable[0]->type);
+//
+//            $pricesTB = $wpdb->prefix . 'scwatbwsr_prices';
+//            $prices_sql = $wpdb->prepare("SELECT price from {$pricesTB} where typeid=%d", $tabletype);
+//            $pricestable = $wpdb->get_results($prices_sql);
+//            $tableprice = intval($pricestable[0]->price);
+//
+//            $current_price = $fields[ $index ]['amount_raw'];
+//            $new_price = intval($current_price) + $tableprice;
+//
+//            $fields[ $index ]['value']      = wpforms_format_amount( $new_price, true );
+//            $fields[ $index ]['amount']     = wpforms_format_amount( $new_price );
+//            $fields[ $index ]['amount_raw'] = $new_price;
+//        }
     }
 
     return $fields;
 }
 
-add_filter('wpforms_process_filter', 'wpf_dev_process_filter', 10, 3);
+add_filter('wpforms_process_filter', 'wpf_dev_process_filter', 20, 3);
 
 
 /**
@@ -470,7 +493,7 @@ function wpf_dev_process($fields, $entry, $form_data)
     $num_ppl = getValueById($wpf_id_num_ppl, $fields);
 
 
-    global $wpdb;
+    global $wpdb,$wpforms;
 
     //check whether entry already exists
     $ordersTB = $wpdb->prefix . 'scwatbwsr_orders';
@@ -498,7 +521,7 @@ function wpf_dev_process($fields, $entry, $form_data)
             $order_id
         ));
     } else {
-        $wpforms()->process->errors[ $form_data['id'] ] [ '4' ] = "Some Error occured";
+        $wpforms()->process->errors[ $form_data['id'] ] [ $wpf_id_table ] = "Fehler: Der Tisch konnte nicht gebucht werden.";
     }
 }
 
@@ -581,8 +604,8 @@ function csv_export()
         'Geburtstag',
         'Notiz',
         'AnzahlPersonen',
-        'ListeDrinks',
-        'Summe',
+        //'ListeDrinks',
+        //'Summe',
         'Hash'
     );
 
@@ -612,8 +635,8 @@ function csv_export()
             $order->birthday,
             $order->note,
             $order->numberPersons,
-            $order->listDrinks,
-            $order->total,
+            //$order->listDrinks,
+            //$order->total,
             $order->orderId
         );
         $data_rows[] = $row;

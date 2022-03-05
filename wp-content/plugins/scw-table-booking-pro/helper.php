@@ -38,6 +38,7 @@ if ($task == "add_room") {
     $tbrecwidth = filter_var($_POST["tbrecwidth"], FILTER_SANITIZE_STRING);
     $tbrecheight = filter_var($_POST["tbrecheight"], FILTER_SANITIZE_STRING);
     $tbcirwidth = filter_var($_POST["tbcirwidth"], FILTER_SANITIZE_STRING);
+    $maxppl = filter_var($_POST["maxppl"], FILTER_SANITIZE_STRING);
 
     $typesTb = $wpdb->prefix . 'scwatbwsr_types';
     $getdtSql = $wpdb->prepare("SELECT * from {$typesTb} where roomid = %s and name=%s", $roomId, $typename);
@@ -46,8 +47,8 @@ if ($task == "add_room") {
     if ($rs) {
         echo "This type already exists!";
     } else {
-        $wpdb->query($wpdb->prepare("INSERT INTO $typesTb (roomid, name, tbbg, tbshape, tbrecwidth, tbrecheight, tbcirwidth)
-		VALUES (%d, %s, %s, %s, %s, %s, %s)", $roomId, $typename, $tbbg, $tbshape, $tbrecwidth, $tbrecheight, $tbcirwidth));
+        $wpdb->query($wpdb->prepare("INSERT INTO $typesTb (roomid, name, tbbg, tbshape, tbrecwidth, tbrecheight, tbcirwidth, maxppl)
+		VALUES (%d, %s, %s, %s, %s, %s, %s, %s)", $roomId, $typename, $tbbg, $tbshape, $tbrecwidth, $tbrecheight, $tbcirwidth, $maxppl));
     }
 } elseif ($task == "save_type") {
     $thistypeid = filter_var($_POST["thistypeid"], FILTER_VALIDATE_INT);
@@ -55,12 +56,11 @@ if ($task == "add_room") {
     $thistbrecwidth = filter_var($_POST["thistbrecwidth"], FILTER_SANITIZE_STRING);
     $thistbrecheight = filter_var($_POST["thistbrecheight"], FILTER_SANITIZE_STRING);
     $thistbcirwidth = filter_var($_POST["thistbcirwidth"], FILTER_SANITIZE_STRING);
-    //$thisseatcolor = filter_var($_POST["thisseatcolor"], FILTER_SANITIZE_STRING);
-    //$seatwidth = filter_var($_POST["seatwidth"], FILTER_SANITIZE_STRING);
+    $maxppl = filter_var($_POST["maxppl"], FILTER_SANITIZE_STRING);
 
     $typesTb = $wpdb->prefix . 'scwatbwsr_types';
-    $wpdb->query($wpdb->prepare("UPDATE $typesTb SET tbbg=%s, tbrecwidth=%s, tbrecheight=%s, tbcirwidth=%s WHERE id=%d",
-        $thistbcolor, $thistbrecwidth, $thistbrecheight, $thistbcirwidth, $thistypeid));
+    $wpdb->query($wpdb->prepare("UPDATE $typesTb SET tbbg=%s, tbrecwidth=%s, tbrecheight=%s, tbcirwidth=%s, maxppl=%s WHERE id=%d",
+        $thistbcolor, $thistbrecwidth, $thistbrecheight, $thistbcirwidth, $maxppl, $thistypeid));
 } elseif ($task == "delete_type") {
     $thistypeid = filter_var($_POST["thistypeid"], FILTER_VALIDATE_INT);
 
@@ -499,6 +499,40 @@ if ($task == "add_room") {
         }
 
         echo $total;
+    }
+} elseif ($task == "get_max_ppl") {
+    $proid = filter_var($_POST["proid"], FILTER_VALIDATE_INT);
+    $seat = filter_var($_POST["seat"], FILTER_SANITIZE_STRING);
+    $posttype = filter_var($_POST["posttype"], FILTER_SANITIZE_STRING);
+
+    $_SESSION["seat" . $proid] = $seat;
+
+    if ($posttype == "events") {
+        $proTb = $wpdb->prefix . 'scwatbwsr_products';
+        $tablesTb = $wpdb->prefix . 'scwatbwsr_tables';
+        $typesTb = $wpdb->prefix . 'scwatbwsr_types';
+
+        $getRoomSql = $wpdb->prepare("SELECT * from {$proTb} where proid=%d", $proid);
+        $room = $wpdb->get_results($getRoomSql);
+        $roomid = $room[0]->roomid;
+
+        $maxppl = "";
+
+        if (isset($_SESSION["seat" . $proid])) {
+            $seat = $_SESSION["seat" . $proid];
+            $pertbArr = array();
+            $onetimeArr = array();
+
+            $getTableSql = $wpdb->prepare("SELECT * from {$tablesTb} where roomid=%d and label=%s", $roomid, $seat);
+            $getTable = $wpdb->get_results($getTableSql);
+            $typeid = $getTable[0]->type;
+
+            $getTypeSql = $wpdb->prepare("SELECT maxppl from {$typesTb} where id=%d ", $typeid);
+            $getType = $wpdb->get_results($getTypeSql);
+            $maxppl = $getType[0]->maxppl;
+        }
+
+        echo $maxppl;
     }
 } elseif ($task == "delete_order") {
     $oid = filter_var($_POST["oid"], FILTER_VALIDATE_INT);

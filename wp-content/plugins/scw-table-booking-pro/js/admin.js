@@ -154,9 +154,7 @@ var upload_image_button=false;
 			var tbrecwidth = elthis.find(".scwatbwsr_roomtype_add_tbshape_rec_width").val();
 			var tbrecheight = elthis.find(".scwatbwsr_roomtype_add_tbshape_rec_height").val();
 			var tbcirwidth = elthis.find(".scwatbwsr_roomtype_add_tbshape_cir_width").val();
-			//var seatbg = elthis.find(".scwatbwsr_roomtype_add_seatcolor_input").val();
-			//var seatshape = elthis.find("input[name='scwatbwsr_roomtype_add_seatshape']:checked").val();
-			//var seatwidth = elthis.find(".scwatbwsr_roomtype_add_seat_size").val();
+			var maxppl = elthis.find(".scwatbwsr_roomtype_add_maxppl_input").val();
 			
 			if(typename && tbshape){
 				jQuery.ajax({
@@ -169,6 +167,7 @@ var upload_image_button=false;
 						tbrecwidth: tbrecwidth,
 						tbrecheight: tbrecheight,
 						tbcirwidth: tbcirwidth,
+						maxppl: maxppl,
 						task : "add_type"
 					},
 					type: 'POST',
@@ -201,8 +200,7 @@ var upload_image_button=false;
 				var thistbrecwidth = thistype.find(".scwatbwsr_roomtype_item_tbsize_recwidth").val();
 				var thistbrecheight = thistype.find(".scwatbwsr_roomtype_item_tbsize_recheight").val();
 				var thistbcirwidth = thistype.find(".scwatbwsr_roomtype_item_tbsize_cirwidth").val();
-				//var thisseatcolor = thistype.find(".scwatbwsr_roomtype_item_seatbg_input").val();
-				//var seatwidth = thistype.find(".scwatbwsr_roomtype_item_seatsize_width").val();
+				var maxppl = thistype.find(".scwatbwsr_roomtype_item_maxppl_input").val();
 				
 				jQuery.ajax({
 					url: "../wp-content/plugins/scw-table-booking-pro/helper.php",
@@ -212,6 +210,7 @@ var upload_image_button=false;
 						thistbrecwidth: thistbrecwidth,
 						thistbrecheight: thistbrecheight,
 						thistbcirwidth: thistbcirwidth,
+						maxppl: maxppl,
 						task : "save_type"
 					},
 					type: 'POST',

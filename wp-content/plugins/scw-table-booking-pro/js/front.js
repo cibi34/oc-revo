@@ -2,11 +2,6 @@
 "use strict";
 	var url = jQuery(".scwatbwsr_url").val();
 	var proid = jQuery(".product_id").val();
-	var roomid = jQuery(".profileid").val();
-	var tbbookedcolor = jQuery(".tbbookedcolor").val();
-	var compulsory = jQuery(".scw_compulsory").val();
-	var bookingtime = jQuery(".scw_bookingtime").val();
-	var date_format = jQuery(".scw_date_format").val();
 	var roomwidth = jQuery(".scw_roomwidth").val();
 	var roomheight = jQuery(".scw_roomheight").val();
 	var posttype = jQuery(".scw_posttype").val();
@@ -22,6 +17,8 @@
 		thistb.children(".scwatbwsr_map_tables_table_label").on("click", function(){
 			if(jQuery(this).hasClass("active")){
 				jQuery(this).removeClass("active");
+				jQuery(".tbf-selected-table>input").val("");
+
 			}else{
 				jQuery(".scwatbwsr_map_tables_table").each(function(){
 					jQuery(this).find(".scwatbwsr_map_tables_table_label.active").removeClass("active");
@@ -30,12 +27,15 @@
 				jQuery(this).addClass("active");
 				const vlabel = jQuery(this).text().trim();
 				jQuery(".tbf-selected-table>input").val(vlabel);
+
 			}
-			sessSeat(this);
+			getPrice(this);
+			getMaxPeople(this);
+
 		});
 	});
 
-	function sessSeat(label){
+	function getPrice(label){
 		var seat = jQuery(label).text().trim();
 		jQuery.ajax({
 			type: "POST",
@@ -54,7 +54,33 @@
 
 				if(posttype == "events"){
 					const sum = data + "€";
-					jQuery(".wpforms-payment-total").text(sum);
+					jQuery(".tbf-mindestverzehr>input").val(sum);
+				}
+			}
+		});
+	}
+
+	function getMaxPeople(label){
+		var seat = jQuery(label).text().trim();
+		jQuery.ajax({
+			type: "POST",
+			url: url+"helper.php",
+			data:{
+				task: "get_max_ppl",
+				seat: seat,
+				proid: proid,
+				posttype: posttype
+			},
+			success : function(data){
+
+				if(posttype == "events"){
+					jQuery(".tbf-number-ppl select option").each(function(){
+						$(this).show();
+						if(parseInt(jQuery(this).val()) > parseInt(data)){
+							$(this).hide();
+						}
+					});
+					jQuery(".tbf-number-ppl label").text("Anzahl Gäste (max. " + data + ")" );
 				}
 			}
 		});
@@ -75,6 +101,7 @@
 	zoomInButton.addEventListener('click', panzoom.zoomIn);
 	zoomOutButton.addEventListener('click', panzoom.zoomOut);
 	resetButton.addEventListener('click', panzoom.reset);
+
 	jQuery(".tbf-selected-table > input").prop('readOnly', true);
 	jQuery(".tbf-date > input").prop('readOnly', true);
 
