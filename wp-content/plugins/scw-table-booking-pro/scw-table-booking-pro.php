@@ -10,7 +10,7 @@
  * License: GPLv2 or later
  */
 
-// WP FORMS VARIABLES
+//// WP FORMS VARIABLES
 $wpf_id_name = 1;
 $wpf_id_mail = 2;
 $wpf_id_table = 3;
@@ -28,7 +28,27 @@ $wpf_id_birthday = 17;
 $wpf_id_street = 27;
 $wpf_id_plz = 28;
 $wpf_id_city = 29;
+$wpf_id_event_name = 30;
+$wpf_id_area = 31;
 
+//$wpf_id_name = 2;
+//$wpf_id_mail = 3;
+//$wpf_id_table = 57;
+//$wpf_id_date = 10;
+//$wpf_id_phone = 46;
+//$wpf_id_notes = 18;
+//$wpf_id_num_ppl = 20;
+//$wpf_id_booking_id = 17;
+//$wpf_id_order_id = 11;
+//$wpf_id_cancel_button = 16;
+//$wpf_id_event_post_id = 15;
+//$wpf_id_sum = 48;
+//$wpf_id_birthday = 43;
+//$wpf_id_street = 63;
+//$wpf_id_plz = 65;
+//$wpf_id_city = 64;
+//$wpf_id_event_name = 62;
+//$wpf_id_area = 61;
 
 define('SCWATBWSR_URL', plugin_dir_url(__FILE__));
 
@@ -111,6 +131,7 @@ function scwatbwsr_install()
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`productId` varchar(255) DEFAULT NULL,
 		`seats` varchar(255) DEFAULT NULL,
+		`area` varchar(255) DEFAULT NULL,
 		`name` varchar(255) DEFAULT NULL,
 		`email` varchar(255) DEFAULT NULL,
 		`phone` varchar(255) DEFAULT NULL,
@@ -423,7 +444,7 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
 
     // #octo id's von Table Booking Form
     // Erstellt hash (orderid) und fügt sie in die Form
-    global $wpdb,$wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button;
+    global $wpdb,$wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button, $wpf_id_event_post_id, $wpf_id_event_name;
     $name = getValueById($wpf_id_name, $fields);
     $table = getValueById($wpf_id_table, $fields);
     $date = getValueById($wpf_id_date, $fields);
@@ -442,6 +463,14 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
         // add cancel button to fields
         if (! empty( $field['id'] ) && $field['id'] == $wpf_id_cancel_button) {
             $fields[$index]['value'] = $button;
+        }
+        // add event post id
+        if (! empty( $field['id'] ) && $field['id'] == $wpf_id_event_post_id) {
+            $fields[$index]['value'] = $entry['post_id'];
+        }
+        // add event post name
+        if (! empty( $field['id'] ) && $field['id'] == $wpf_id_event_name) {
+            $fields[$index]['value'] = get_post($entry['post_id'])->post_title;
         }
     }
 
@@ -466,7 +495,7 @@ function wpf_dev_process($fields, $entry, $form_data)
 {
     // #octo id's von Table Booking Form
     // schreibt Werte aus Form in Datenbank
-    global $wpf_id_name, $wpf_id_mail, $wpf_id_table,$wpf_id_date,$wpf_id_phone, $wpf_id_notes, $wpf_id_num_ppl,$wpf_id_order_id,$wpf_id_birthday,$wpf_id_street,$wpf_id_plz,$wpf_id_city;
+    global $wpf_id_name, $wpf_id_area, $wpf_id_mail, $wpf_id_table,$wpf_id_date,$wpf_id_phone, $wpf_id_notes, $wpf_id_num_ppl,$wpf_id_order_id,$wpf_id_birthday,$wpf_id_street,$wpf_id_plz,$wpf_id_city;
     $name = getValueById($wpf_id_name, $fields);
     $table = getValueById($wpf_id_table, $fields);
     $date = getValueById($wpf_id_date, $fields);
@@ -479,6 +508,7 @@ function wpf_dev_process($fields, $entry, $form_data)
     $plz = getValueById($wpf_id_plz, $fields);
     $city = getValueById($wpf_id_city, $fields);
     $num_ppl = getValueById($wpf_id_num_ppl, $fields);
+    $area = getValueById($wpf_id_area, $fields);
 
 
     global $wpdb,$wpforms;
@@ -494,10 +524,11 @@ function wpf_dev_process($fields, $entry, $form_data)
 
     if(count($orders) == 0 && count($bookedseats)==0) {
         $wpdb->query($wpdb->prepare(
-            "INSERT INTO $ordersTB (`productId`, `seats`, `name`, `email`, `phone`, `note`, `total`,`birthday`,`street`,`plz`,`city`,`numberPersons`,`listDrinks`,`orderId`)
-	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "INSERT INTO $ordersTB (`productId`, `seats`, `area`, `name`, `email`, `phone`, `note`, `total`,`birthday`,`street`,`plz`,`city`,`numberPersons`,`listDrinks`,`orderId`)
+	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             $entry['post_id'],
             $table,
+            $area,
             $name,
             $email,
             $phone,
@@ -507,16 +538,11 @@ function wpf_dev_process($fields, $entry, $form_data)
             $street,
             $plz,
             $city,
-            $birthday,
-            $birthday,
             $num_ppl,
             " ",
             $order_id
         ));
     } else {
-        error_log(json_encode(count($orders)));
-        error_log(json_encode(count($bookedseats)));
-        error_log(json_encode($form_data));
         $wpforms()->process->errors[ $form_data['id'] ] [ '4' ] = "Some Error occured";
     }
 }
@@ -591,7 +617,9 @@ function csv_export()
     $filename = 'orders-' . $domain . '-' . time() . '.csv';
 
     $header_row = array(
+        'id',
         'ProductId',
+        'Area',
         'Name',
         'Tisch',
         'E-Mail',
@@ -625,7 +653,9 @@ function csv_export()
 
     foreach ($orders as $order) {
         $row = array(
+            $order->id,
             $order->productId,
+            $order->area,
             $order->name,
             $order->seats,
             $order->email,
