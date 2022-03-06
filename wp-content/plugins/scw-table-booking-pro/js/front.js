@@ -16,23 +16,20 @@
 
 		thistb.children(".scwatbwsr_map_tables_table_label").on("click", function(){
 			if(jQuery(this).hasClass("active")){
-				jQuery(this).removeClass("active");
-				jQuery(".tbf-selected-table>input").val("");
-
+				//jQuery(this).removeClass("active");
+				//jQuery(".tbf-selected-table>input").val("");
 			}else{
 				jQuery(".scwatbwsr_map_tables_table").each(function(){
 					jQuery(this).find(".scwatbwsr_map_tables_table_label.active").removeClass("active");
 				});
-
 				jQuery(this).addClass("active");
 				const vlabel = jQuery(this).text().trim();
 				jQuery(".tbf-selected-table>input").val(vlabel);
 				getAreaName(vlabel);
+				getPrice(this);
+				getMaxPeople(this);
 
 			}
-			getPrice(this);
-			getMaxPeople(this);
-
 		});
 	});
 
@@ -101,11 +98,12 @@
 	const zoomOutButton = document.getElementById('scwatbwsr_map_zoom-out');
 	const resetButton = document.getElementById('scwatbwsr_map_zoom_reset');
 	const panzoom = Panzoom(element, {
-		 bounds: true,
-		 zoomDoubleClickSpeed: 1,
-		 excludeClass: "scwatbwsr_map_exclude"
+		bounds: true,
+		zoomDoubleClickSpeed: 1,
+		excludeClass: "scwatbwsr_map_exclude",
+		step: 0.15
 	});
-	
+
 	const parent = element.parentElement
 	parent.addEventListener('wheel', panzoom.zoomWithWheel);
 	zoomInButton.addEventListener('click', panzoom.zoomIn);
