@@ -104,6 +104,7 @@
 
 	jQuery(".tbf-selected-table > input").prop('readOnly', true);
 	jQuery(".tbf-date > input").prop('readOnly', true);
+	jQuery(".tbf-mindestverzehr > input").prop('readOnly', true);
 
 	const date = jQuery(".scwatbwsr_schedule_item").attr("data-date");
 	jQuery(".tbf-date > input").val(date);

@@ -555,38 +555,4 @@ if ($task == "add_room") {
 		VALUES (%d, %s, %d)",
             $roomId, $table, $proid));
     }
-} elseif ($task == "send_mail") {
-    $name = $_POST["name"];
-    $address = $_POST["address"];
-    $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $note = $_POST["note"];
-    $proId = $_POST["proId"];
-    $total = $_POST["total"];
-    $seats = $_POST["seats"];
-    $schedule = $_POST["schedule"];
-
-    $adminEmail = get_option('admin_email');
-
-    $subject = 'Order Information';
-    $body = 'Order information<br>';
-    $body .= 'Schedule: ' . $schedule . '<br>';
-    $body .= 'Seats: ' . str_replace("@", " ", $seats) . '<br>';
-    $body .= 'Name: ' . $name . '<br>';
-    $body .= 'Address: ' . $address . '<br>';
-    $body .= 'Email: ' . $email . '<br>';
-    $body .= 'Phone: ' . $phone . '<br>';
-    $body .= 'Note: ' . $note . '<br>';
-    $body .= 'Total: ' . $total . '<br>';
-    $headers = array('Content-Type: text/html; charset=UTF-8');
-
-    echo 1;
-    //echo wp_mail( array($email, $adminEmail), $subject, $body, $headers );
-
-    $seatsnew = explode("@", $seats);
-
-    $table_name = $wpdb->prefix . 'scwatbwsr_orders';
-    $wpdb->query($wpdb->prepare("INSERT INTO $table_name (`productId`, `orderId`, `seats`, `schedule`, `name`, `address`, `email`, `phone`, `note`, `total`)
-	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-        $proId, "", implode(",", $seatsnew), $schedule, $name, $address, $email, $phone, $note, $total));
 }

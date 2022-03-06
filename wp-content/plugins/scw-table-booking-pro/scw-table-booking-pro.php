@@ -25,7 +25,9 @@ $wpf_id_event_post_id = 14;
 $wpf_id_vodka_amount = 15;
 $wpf_id_sum = 16;
 $wpf_id_birthday = 17;
-
+$wpf_id_street = 27;
+$wpf_id_plz = 28;
+$wpf_id_city = 29;
 
 
 define('SCWATBWSR_URL', plugin_dir_url(__FILE__));
@@ -113,6 +115,9 @@ function scwatbwsr_install()
 		`email` varchar(255) DEFAULT NULL,
 		`phone` varchar(255) DEFAULT NULL,
 		`birthday` varchar(255) DEFAULT NULL,
+		`street` varchar(255) DEFAULT NULL,
+		`plz` varchar(255) DEFAULT NULL,
+		`city` varchar(255) DEFAULT NULL,
 		`note` varchar(255) DEFAULT NULL,
 		`numberPersons` varchar(255) DEFAULT NULL,
 		`listDrinks` varchar(255) DEFAULT NULL,
@@ -418,12 +423,10 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
 
     // #octo id's von Table Booking Form
     // Erstellt hash (orderid) und fügt sie in die Form
-    // Fügt den Tischpreis zur Preiskalkulation hinzu
-    global $wpdb,$wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button, $wpf_id_sum;
+    global $wpdb,$wpf_id_date, $wpf_id_name, $wpf_id_table, $wpf_id_order_id, $wpf_id_cancel_button;
     $name = getValueById($wpf_id_name, $fields);
     $table = getValueById($wpf_id_table, $fields);
     $date = getValueById($wpf_id_date, $fields);
-    $sum = getValueById($wpf_id_sum, $fields);
 
     $data = $name . $date . $table;
     $order_id = hash("sha256", $data);
@@ -440,25 +443,6 @@ function wpf_dev_process_filter($fields, $entry, $form_data)
         if (! empty( $field['id'] ) && $field['id'] == $wpf_id_cancel_button) {
             $fields[$index]['value'] = $button;
         }
-//        // add table price to total price calculation
-//        if ( ! empty( $field['id'] ) && $field['id'] == $wpf_id_sum) {
-//            $tablesTB = $wpdb->prefix . 'scwatbwsr_tables';
-//            $tables_sql = $wpdb->prepare("SELECT type from {$tablesTB} where label=%s", $table);
-//            $typestable = $wpdb->get_results($tables_sql);
-//            $tabletype = intval($typestable[0]->type);
-//
-//            $pricesTB = $wpdb->prefix . 'scwatbwsr_prices';
-//            $prices_sql = $wpdb->prepare("SELECT price from {$pricesTB} where typeid=%d", $tabletype);
-//            $pricestable = $wpdb->get_results($prices_sql);
-//            $tableprice = intval($pricestable[0]->price);
-//
-//            $current_price = $fields[ $index ]['amount_raw'];
-//            $new_price = intval($current_price) + $tableprice;
-//
-//            $fields[ $index ]['value']      = wpforms_format_amount( $new_price, true );
-//            $fields[ $index ]['amount']     = wpforms_format_amount( $new_price );
-//            $fields[ $index ]['amount_raw'] = $new_price;
-//        }
     }
 
     return $fields;
@@ -482,7 +466,7 @@ function wpf_dev_process($fields, $entry, $form_data)
 {
     // #octo id's von Table Booking Form
     // schreibt Werte aus Form in Datenbank
-    global $wpf_id_name, $wpf_id_mail, $wpf_id_table,$wpf_id_date,$wpf_id_phone, $wpf_id_notes, $wpf_id_num_ppl,$wpf_id_order_id,$wpf_id_sum,$wpf_id_birthday;
+    global $wpf_id_name, $wpf_id_mail, $wpf_id_table,$wpf_id_date,$wpf_id_phone, $wpf_id_notes, $wpf_id_num_ppl,$wpf_id_order_id,$wpf_id_birthday,$wpf_id_street,$wpf_id_plz,$wpf_id_city;
     $name = getValueById($wpf_id_name, $fields);
     $table = getValueById($wpf_id_table, $fields);
     $date = getValueById($wpf_id_date, $fields);
@@ -490,8 +474,10 @@ function wpf_dev_process($fields, $entry, $form_data)
     $order_id = getValueById($wpf_id_order_id, $fields);
     $phone = getValueById($wpf_id_phone, $fields);
     $note = getValueById($wpf_id_notes, $fields);
-    $total = getValueById($wpf_id_sum, $fields);
     $birthday = getValueById($wpf_id_birthday, $fields);
+    $street = getValueById($wpf_id_street, $fields);
+    $plz = getValueById($wpf_id_plz, $fields);
+    $city = getValueById($wpf_id_city, $fields);
     $num_ppl = getValueById($wpf_id_num_ppl, $fields);
 
 
@@ -508,22 +494,30 @@ function wpf_dev_process($fields, $entry, $form_data)
 
     if(count($orders) == 0 && count($bookedseats)==0) {
         $wpdb->query($wpdb->prepare(
-            "INSERT INTO $ordersTB (`productId`, `seats`, `name`, `email`, `phone`, `note`, `total`,`birthday`,`numberPersons`,`listDrinks`,`orderId`)
-	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "INSERT INTO $ordersTB (`productId`, `seats`, `name`, `email`, `phone`, `note`, `total`,`birthday`,`street`,`plz`,`city`,`numberPersons`,`listDrinks`,`orderId`)
+	VALUES (%d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             $entry['post_id'],
             $table,
             $name,
             $email,
             $phone,
             $note,
-            $total,
+            "",
+            $birthday,
+            $street,
+            $plz,
+            $city,
+            $birthday,
             $birthday,
             $num_ppl,
             " ",
             $order_id
         ));
     } else {
-        $wpforms()->process->errors[ $form_data['id'] ] [ $wpf_id_table ] = "Fehler: Der Tisch konnte nicht gebucht werden.";
+        error_log(json_encode(count($orders)));
+        error_log(json_encode(count($bookedseats)));
+        error_log(json_encode($form_data));
+        $wpforms()->process->errors[ $form_data['id'] ] [ '4' ] = "Some Error occured";
     }
 }
 
@@ -558,7 +552,6 @@ function wpf_dev_entry_email_data($fields, $entry, $form_data)
             $fields[$index]['value'] = $id;
         }
     }
-
 
     return $fields;
 }
@@ -604,6 +597,9 @@ function csv_export()
         'E-Mail',
         'Telefon',
         'Geburtstag',
+        'Straße',
+        'PLZ',
+        'Ort',
         'Notiz',
         'AnzahlPersonen',
         //'ListeDrinks',
@@ -635,6 +631,9 @@ function csv_export()
             $order->email,
             $order->phone,
             $order->birthday,
+            $order->street,
+            $order->plz,
+            $order->city,
             $order->note,
             $order->numberPersons,
             //$order->listDrinks,
