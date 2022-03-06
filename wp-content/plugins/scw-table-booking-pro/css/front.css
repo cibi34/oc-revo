@@ -1,7 +1,26 @@
+div.wpforms-container-full .wpforms-form input[type=submit],
+div.wpforms-container-full .wpforms-form button[type=submit],
+div.wpforms-container-full .wpforms-form .wpforms-page-button {
+    background: #E41645 !important;
+    border: none !important;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.wpforms-entry-preview-notice {
+    background: #E41645 !important;
+    border: none !important;
+    border-radius: 5px;
+}
+.wpforms-confirmation-container-full, div[submit-success]>.wpforms-confirmation-container-full:not(.wpforms-redirection-message) {
+    background: #E41645 !important;
+    border: none !important;
+    border-radius: 5px;
+}
+
 .wpforms-page-indicator-steps {
     width: 40%;
 }
-
 
 .tbf-date input,
 .tbf-selected-table input,
@@ -98,6 +117,7 @@ form.cart{
 	margin-top: 20px;
 	width: 100%;
 	overflow: hidden;
+    height: 50vh;
 }
 .scwatbwsr_map_bg {
     display: inline-block;
@@ -153,21 +173,21 @@ form.cart{
 }
 #scwatbwsr_map_zoom-in {
     display: inline-block;
-    background: teal;
+    background: #E41645;
     color: #fff;
     padding: 8px;
     cursor: pointer;
 }
 #scwatbwsr_map_zoom-out {
     display: inline-block;
-    background: teal;
+    background: #E41645;
     color: #fff;
     padding: 8px;
     cursor: pointer;
 }
 #scwatbwsr_map_zoom_reset {
     display: inline-block;
-    background: teal;
+    background: #E41645;
     color: #fff;
     padding: 8px;
     cursor: pointer;
