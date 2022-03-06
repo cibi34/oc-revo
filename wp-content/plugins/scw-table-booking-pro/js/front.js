@@ -39,8 +39,8 @@
 	function getAreaName(vlabel) {
 		const first_char = vlabel.charAt(0);
 		let area_name = "";
-		if(first_char === "S") area_name = "Showroom";
-		else if (first_char === "L") area_name = "VIP";
+		if(first_char === "S") area_name = "SHOWROOM";
+		else if (first_char === "L") area_name = "LA CHANGA";
 		else if (first_char === "X") area_name = "XO";
 		jQuery(".tbf-area>input").val(area_name);
 	}
